@@ -1,5 +1,7 @@
 # Building documentation
 
+Documentation is written in reStructuredText.
+
 Wisualia uses [Sphinx](http://www.sphinx-doc.org/) for documentation generation.
 Following Sphinx extensions are also used:
 * [autodoc] and [apidoc] for API documentation generation.
