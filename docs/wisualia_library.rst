@@ -1,5 +1,5 @@
 Wisualia library
-============
+================
 
 .. automodule:: wisualia
   :members:

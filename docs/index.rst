@@ -4,7 +4,7 @@
    contain the root `toctree` directive.
 
 Wisualia
-====
+========
 
 Wisualia is a programmable environment that lets you create animations using
 Python 3 code.
