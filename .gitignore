@@ -1,0 +1,7 @@
+**/__pycache__
+*.pyc
+**/.mypy_cache
+
+docs/_apidoc
+docs/_build
+docs/_images
