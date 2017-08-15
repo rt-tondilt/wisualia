@@ -23,7 +23,7 @@ Arguments:
 '''
 
 import __main__
-os.chdir(os.path.dirname(__main__.__file__))
+os.chdir(os.path.dirname(os.path.abspath(__main__.__file__)))
 
 wisualia_dir = os.path.dirname(os.getcwd())
 python = os.path.join(wisualia_dir, 'mingw32/bin/python3.6.exe')
