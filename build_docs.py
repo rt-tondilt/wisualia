@@ -37,7 +37,7 @@ def run(name, task):
     completed_process = subprocess.run(task)
 
 
-if len(sys.argv)>1:
+if len(sys.argv)==2:
     if sys.argv[1] in ['-h', '--help']:
         print(help_text)
         exit()
@@ -47,6 +47,15 @@ if len(sys.argv)>1:
                 shutil.rmtree(place)
             except FileNotFoundError:
                 pass
+    else:
+        print('ERROR: Unknown argument')
+        print(help_text)
+        exit()
+elif len(sys.argv)>2:
+    print('ERROR: To many arguments.')
+    print(help_text)
+    exit()
+
 
 print('           BUILDING DOCS')
 print('====================================')
