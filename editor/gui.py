@@ -62,7 +62,7 @@ color_tags = []
 
 def try_parse_color(text):
     # example 'RGBA( 1.0 , 0.0 , 0.1 )'
-    text = text.replace(' ', '')
+    # text = text.replace(' ', '')
     try:
         l=len(text)
         step=round(10/l,2)
