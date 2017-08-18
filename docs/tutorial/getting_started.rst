@@ -60,7 +60,7 @@ Knowing that we can already do some animation.
 
   def loop(time):
       circle((2, time/5), time/10)
-      circle((-2, time/5), time/10)
+      circle((-1, time/5), time/10)
 
 .. testcleanup:: second_circle
 
@@ -80,7 +80,65 @@ Resulting animation at 1 second.
 Fill and Stroke
 ---------------
 
-TODO.
+The third argument of circle is a Pattern named fill. A pattern is a virtual
+"paint" that is used to draw things. Here is an example of usage of RGBA
+pattern.
+
+.. testcode:: first_fill
+
+  import wisualia
+  from wisualia.shapes import circle
+  from wisualia.patterns import RGBA
+
+  def loop(time):
+      circle((0,0), 1, fill=RGBA(0, 0, 1, 1))
+      circle((0,0), 0.2, fill=RGBA(0, 0, 0))
+      circle((1,0), 0.5, fill=RGBA(1, 0, 0, 0.5))
+
+.. testcleanup:: first_fill
+
+  loop(1)
+  wisualia_x.core.image.write_to_png('_images/first_fill.png')
+
+.. image:: /_images/first_fill.png
+
+Note that all color values are in range from 0 to 1. The default alpha value is
+1 meaning completely opaque.
+
+The last argument specifies the properties of the curve of the circle. It is an
+optional argument meaning that it can be either :py:obj:`None` or
+:py:obj:`wisualia.shapes.Stroke`. If the value is :py:obj:`None`, then no stroke
+is drawn. As we saw before, this argument defaults to :py:obj:`None`.
+
+.. testcode:: first_stroke
+
+  import wisualia
+  from wisualia.shapes import circle, Stroke
+  from wisualia.patterns import RGBA
+
+  def loop(time):
+      blueish = RGBA(0, 0, 1, 0.5)
+      redish = RGBA(1, 0, 0, 0.5)
+
+      circle((-2,0), 0.5, fill=blueish)
+      circle((-1,0), 0.5, fill=blueish, stroke=None)
+      circle(( 0,0), 0.5, fill=blueish, stroke=Stroke())
+      circle(( 1,0), 0.5,
+             fill=blueish,
+             stroke=Stroke(width=0.2, pattern=redish))
+      circle(( 1,0), 0.5,
+             fill=blueish,
+             stroke=Stroke(width=0.2, pattern=redish))
+      circle(( 2,0), 2,
+             fill=RGBA(0,0,0,0),
+             stroke=Stroke(width=0.2, pattern=redish))
+
+.. testcleanup:: first_stroke
+
+  loop(1)
+  wisualia_x.core.image.write_to_png('_images/first_stroke.png')
+
+.. image:: /_images/first_stroke.png
 
 Exporting animations
 --------------------

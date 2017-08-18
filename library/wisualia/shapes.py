@@ -14,7 +14,7 @@ class LineCap(IntEnum):
     ROUND = 1
     SQUARE = 2
 class Dash(object):
-    def __init__(self, dashes:List[float], offset:int) -> None:
+    def __init__(self, dashes:List[float], offset:int=0) -> None:
         self.dashes = dashes
         self.offset = offset
 
