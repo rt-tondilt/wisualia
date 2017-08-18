@@ -49,7 +49,8 @@ def animate(loop_fn: Callable[[float], None]) -> None:
     output_buf = StringIO()
 
     print('ANIMATSIOON',__main__.__file__)
-    def make_frame(t:float) -> numpy.array:
+    def make_frame(numpy_t:numpy.float64) -> numpy.array:
+        t = float(numpy_t)
         x = int(CAMERA.width * CAMERA.k)
         y = int(CAMERA.height * CAMERA.k)
         surface = cairo.ImageSurface (cairo.FORMAT_ARGB32, x, y)
