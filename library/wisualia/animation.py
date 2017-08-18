@@ -71,7 +71,15 @@ def animate(loop_fn: Callable[[float], None]) -> None:
 
     clip = mpy.VideoClip(make_frame, duration=DURATION)
     name = os.path.splitext(__main__.__file__)[0]+ '.mp4'
-    clip.write_videofile(name,fps=FPS, audio=False)
+    try:
+        clip.write_videofile(name,fps=FPS, audio=False)
+    except Exception as e:
+        print()
+        print('ERROR WHILE WRITING VIDEO')
+        print('PROGRAMM OUTPUT:')
+        print(output_buf.getvalue())
+        print('RERAISING EXCEPTION')
+        raise e
     output = output_buf.getvalue()
     if output != '':
         print('PROGRAMM OUTPUT:')
