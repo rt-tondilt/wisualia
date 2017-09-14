@@ -8,7 +8,7 @@ import webbrowser
 
 import cairo
 from gi.repository import Gdk
-from worker import Request, Zoom
+from worker import DrawRequest, Zoom
 #from audio import Audio
 import dir_tools
 # NB: There is one more import in the middle of this file.
@@ -17,7 +17,8 @@ import dir_tools
 # Some globals.
 file_name = None #type: Optional[str]
 buffer_surface = cairo.ImageSurface(cairo.FORMAT_ARGB32, 100, 100)
-request = Request(0, 200, 200, Zoom(40, (-4,-4)), False)
+request = DrawRequest(0, 200, 200, Zoom(40, (-4,-4)), False)
+compile_needed = False
 
 
 # Variables to direct control flow in generators.
@@ -151,9 +152,21 @@ drawing_area.set_events(Gdk.EventMask.SCROLL_MASK |
                         Gdk.EventMask.BUTTON_PRESS_MASK |
                         Gdk.EventMask.BUTTON_MOTION_MASK)
 
+def run_if_balanced(buffer, start, end):
+    global compile_needed, engine
+    '''code = input_buffer.get_text(input_buffer.get_start_iter(), input_buffer.get_end_iter(), True)
+    push_chars, pop_chars = '<({[', '>)}]'
+    stack = []
+    for c in code:
+        '''
+    compile_needed = True
+    engine = Please.Run
+    loop.start()
+
 # Connect events with callbacks.
 play_button.connect('clicked', play)
 run_button.connect('clicked', run_engine)
+input_buffer.connect('highlight-updated', run_if_balanced)
 abort_button.connect('clicked', abort_engine)
 save_button.connect('activate', save_file)
 open_button.connect('activate', open_file)

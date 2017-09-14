@@ -7,6 +7,7 @@ import os
 import sys
 from io import StringIO
 from contextlib import redirect_stdout
+from enum import Enum
 
 import cairo #type: ignore
 
@@ -46,13 +47,17 @@ class BytesImage(object):
         return surf
 
 
-class Request(object):
+class DrawRequest(object):
     def __init__(self, t: float, x: int, y: int, zoom: Zoom, grid: bool) -> None:
         self.t = t
         self.x = x
         self.y = y
         self.zoom = zoom
         self.grid = grid
+class CompileRequest(object):
+    def __init__(self, code, file_name):
+        self.code = code
+        self.file_name = file_name
 
 class Response(object):
     pass
@@ -67,78 +72,111 @@ class Success(Response):
 class Failure(Response):
     def __init__(self, error: str) -> None:
         self.error = error
-t='''
-from library import wisualia
-def loop():
-    return 7
-'''
-
-
 
 
 def worker_fn(con):
-    (code, file_name) = con.recv() # type: str
-
-    sys.path[0]=os.path.dirname(file_name)
-    os.chdir(os.path.dirname(file_name))
-    assert isinstance(code, str)
-    vars = {} # type: Dict[str, Any]
-    try:
-        code = compile(code, file_name, 'exec')
-        exec(code, vars)
-        audio_file_name = vars['wisualia'].animation.AUDIO
-    except Exception:
-        con.send(Failure(get_error()))
-        return
-    con.send(InitSuccess(audio_file_name)) # Succesful init
-    # TODO: Check whether wisualia was properly imported.
-
+    code = None
     while True:
-        request = con.recv() # type: Request
-        surf = cairo.ImageSurface(cairo.FORMAT_ARGB32, request.x, request.y)
-        cr = cairo.Context(surf)
+        request = con.recv()
+        
+        if isinstance(request, CompileRequest):
+
+            sys.path[0]=os.path.dirname(request.file_name)
+            os.chdir(os.path.dirname(request.file_name))
+            assert isinstance(request.code, str)
+            vars = {} # type: Dict[str, Any]
+            try:
+                code = compile(request.code, request.file_name, 'exec')
+                exec(code, vars)
+                audio_file_name = vars['wisualia'].animation.AUDIO
+            except Exception:
+                con.send(Failure(get_error()))
+                continue
+            con.send(InitSuccess(audio_file_name)) # Succesful init
+            # TODO: Check whether wisualia was properly imported.
+
+        elif isinstance(request, DrawRequest):
+            surf = cairo.ImageSurface(cairo.FORMAT_ARGB32, request.x, request.y)
+            cr = cairo.Context(surf)
+
+            try:
+                if request.grid:
+                    vars['wisualia'].core._draw_grid(
+                        cr,
+                        request.zoom.k,
+                        request.zoom.b_x,
+                        request.zoom.b_y,
+                        request.x,
+                        request.y)
+                cr.translate(request.zoom.b_x, request.zoom.b_y)
+                cr.scale(request.zoom.k, - request.zoom.k)
+                vars['wisualia'].core.context = cr
+                vars['wisualia'].core.image = vars['wisualia'].image.Image.from_cairo_surface(surf)
+                f = StringIO()
+                with redirect_stdout(f):
+                    vars['loop'](request.t)
+                result = f.getvalue()
+                vars['wisualia'].animation.CAMERA.draw(cr)
+            except Exception :
+                con.send(Failure(get_error()))
+                return
+            surf.flush()
+            con.send(Success(BytesImage(surf), result)) #type: ignore
+        else: assert False
 
 
-        try:
-            if request.grid:
-                vars['wisualia'].core._draw_grid(
-                    cr,
-                    request.zoom.k,
-                    request.zoom.b_x,
-                    request.zoom.b_y,
-                    request.x,
-                    request.y)
-            cr.translate(request.zoom.b_x, request.zoom.b_y)
-            cr.scale(request.zoom.k, - request.zoom.k)
-            vars['wisualia'].core.context = cr
-            vars['wisualia'].core.image = vars['wisualia'].image.Image.from_cairo_surface(surf)
-            f = StringIO()
-            with redirect_stdout(f):
-                vars['loop'](request.t)
-            result = f.getvalue()
-            vars['wisualia'].animation.CAMERA.draw(cr)
-        except Exception :
-            con.send(Failure(get_error()))
-            return
-        surf.flush()
+class Workers(object):
+    def __init__(self):
+        self.worker1 = Worker()
+    def send_program(self, code, file_name):
+        if self.worker1.ready:
+            self.worker1.con.send(CompileRequest(code, file_name))
+            self.worker1.ready = False
+    def send_request(self, r):
+        if self.worker1.ready:
+            self.worker1.con.send(r)
+            self.worker1.ready = False
 
-        con.send(Success(BytesImage(surf), result)) #type: ignore
+
+    def stop(self):
+        self.worker1 = Worker()
+        self.worker2 = Worker()
+    def iter(self):
+        if self.worker2.con.poll():
+            result = self.worker2.con.recv()
+            if isinstance(result, InitSuccess):
+                self.worker1 = worker2
+                self.worker2 = Worker()
+            else:
+                self.worker2.ready = True
+        if self.worker1.con.poll():
+            result = self.worker1.con.recv()
+            if isinstance(result, Success):
+                #display
+                self.worker1.ready = True
+            else:
+                #error
+                self.stop()
 
 
 class Worker(object):
-    def __init__(self, code: str, file_name: str) -> None:
+    def __init__(self) -> None:
         parent, child = Pipe()
         self.process = Process(target=worker_fn, name='WISUALIA ENGINE', args=(child,), daemon=True)
         self.con = parent
         self.process.start()
-        self.con.send((code, file_name))
-    def __del__(self):
-        self.process.terminate()
-    '''def recv_init(self):
-        return self.con.recv()'''
-    def send(self, r: Request):
-        self.con.send(r)
-    def recv(self) -> Optional[Response]:
+        self.working = False
+    def send(self, data):
+        assert not self.working
+        self.con.send(data)
+        self.working = True
+    def recv(self):
         if self.con.poll():
+            self.working = False
             return self.con.recv()
         return None
+    def is_working(self):
+        return self.working
+
+    def __del__(self):
+        self.process.terminate()
