@@ -87,7 +87,7 @@ def main_task():
             output_buffer.set_text(e.error)
             # Pause playing
             if state.playing:
-                state.play(None)
+                state.switch_playing(None)
         del worker
         if not state.running:
             set_status_bar_text('No program running.')
@@ -135,7 +135,7 @@ def play_task(worker):
         scale.set_value(round(scale.get_value()+ FRAME_TIME /1000, 2))
         target_time = get_time() + FRAME_TIME/1000
         if scale.get_value() >= 10:
-            state.play(None)
+            state.switch_playing(None)
 
 
 def update_task(worker, target_time = 0):
