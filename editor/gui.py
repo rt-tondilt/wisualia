@@ -23,7 +23,6 @@ grid_button = builder.get_object("grid_button")
 save_button =  builder.get_object("save_button")
 open_button =  builder.get_object("open_button")
 run_button =  builder.get_object("run_button")
-abort_button = builder.get_object("abort_button")
 help_button = builder.get_object("help_button")
 
 status_bar = builder.get_object("status_bar")
@@ -40,6 +39,8 @@ output_buffer.set_style_scheme(style_manager.get_scheme('cobalt'))
 
 play_icon = Gtk.Image().new_from_stock(Gtk.STOCK_MEDIA_PLAY, Gtk.IconSize.DND)
 pause_icon = Gtk.Image().new_from_stock(Gtk.STOCK_MEDIA_PAUSE, Gtk.IconSize.DND)
+run_icon = Gtk.Image().new_from_icon_name('gtk-execute', Gtk.IconSize.DND)
+abort_icon = Gtk.Image().new_from_icon_name('gtk-stop', Gtk.IconSize.DND)
 
 def bigger_font():
     context = input_view.get_style_context()
@@ -94,7 +95,7 @@ def try_parse_color(text):
                 rgb.append((r,g,b))
             else: assert False
     except Exception as e:
-        
+
         exc_type, exc_obj, exc_tb = sys.exc_info()
         fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
         print(exc_type, fname, exc_tb.tb_lineno)

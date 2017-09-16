@@ -21,9 +21,8 @@ request = DrawRequest(0, 200, 200, Zoom(40, (-4,-4)), False)
 compile_needed = False
 
 
-# Variables to direct control flow in generators.
-class Please(Enum): Run=1; Idle=2; Restart=3
-engine = Please.Idle
+
+running = False
 playing = False
 
 # We can't initialize it right now, because loop.py needs to access globals
@@ -39,19 +38,6 @@ def draw(widget, cr):
     cr.set_source_surface(buffer_surface)
     cr.paint()
 
-def run_engine(_):
-    global engine
-    if engine == Please.Idle:
-        engine = Please.Run
-    elif engine == Please.Run:
-        engine = Please.Restart
-    loop.start()
-
-def abort_engine(_):
-    global engine
-    engine = Please.Idle
-    loop.start()
-
 def resize(widget, event):
     global request
     print('resize')
@@ -66,7 +52,7 @@ def retime(widget):
 
 def rezoom(widget, event):
     global request
-    if engine == Please.Run:
+    if running:
         if event.direction == Gdk.ScrollDirection.UP:
             if request.zoom.k < 5000:
                 request.zoom.combine(Zoom(1.1, (event.x, event.y)))
@@ -131,7 +117,10 @@ def open_file(widget):
             input_buffer.set_text(f.read())
         file_name = name
         file_label.set_text(os.path.basename(name))
-
+        if running:
+            run_engine(None)
+        if playing:
+            play(None)
     dialog.destroy()
 
 def save_file(widget):
@@ -148,26 +137,32 @@ def play(_):
         play_button.set_image(play_icon)
     loop.start()
 
+def run_engine(_):
+    global running
+    if not running:
+        running = True
+        run_button.set_stock_id('gtk-stop')
+        run_button.set_label('Abort')
+    else:
+        running = False
+        run_button.set_stock_id('gtk-execute')
+        run_button.set_label('Run')
+    loop.start()
+
 drawing_area.set_events(Gdk.EventMask.SCROLL_MASK |
                         Gdk.EventMask.BUTTON_PRESS_MASK |
                         Gdk.EventMask.BUTTON_MOTION_MASK)
 
 def run_if_balanced(buffer, start, end):
-    global compile_needed, engine
-    '''code = input_buffer.get_text(input_buffer.get_start_iter(), input_buffer.get_end_iter(), True)
-    push_chars, pop_chars = '<({[', '>)}]'
-    stack = []
-    for c in code:
-        '''
+    global compile_needed
     compile_needed = True
-    engine = Please.Run
-    loop.start()
+    if running:
+        loop.start()
 
 # Connect events with callbacks.
 play_button.connect('clicked', play)
 run_button.connect('clicked', run_engine)
 input_buffer.connect('highlight-updated', run_if_balanced)
-abort_button.connect('clicked', abort_engine)
 save_button.connect('activate', save_file)
 open_button.connect('activate', open_file)
 export_button.connect('clicked', export)
