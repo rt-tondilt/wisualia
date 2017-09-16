@@ -7,9 +7,8 @@ from time import perf_counter as get_time
 import mypy.api
 from gi.repository import GLib
 import state
-from state import Please
 from gui import input_buffer, output_buffer, set_status_bar_text, drawing_area, scale
-from worker import Worker, InitSuccess, Success, Failure
+from worker import Worker, InitSuccess, Success, Failure, CompileRequest, DrawRequest
 from dir_tools import get_dir
 
 
@@ -43,59 +42,69 @@ class FailureException(Exception):
     def __init__(self, error: str) -> None:
         self.error = error
 
-def check_abort(generator):
-    while True:
-        if state.engine != Please.Run:
-            raise FailureException('Programm aborted.')
+# Usage:
+# yield from yield_from_while(generator, lamda: x>3)
+def yield_from_while(generator, condition):
+    while condition():
         try:
             y = next(generator)
         except StopIteration as e:
             raise e
         yield y
 
-
 def main_task():
     while True:
-        while state.engine == Please.Idle:
+        while not state.running:
             print('IDELE')
             yield None
-        worker = None
+        worker = Worker()
+        state.compile_needed = True
         try:
-            worker = yield from check_abort(run_task())
-            if worker is not None:
-                print('we got worker')
-                yield from check_abort(show_task(worker))
+            while True:
+                if state.compile_needed:
+                    state.compile_needed = False
+                    set_status_bar_text('Programm starting.')
+                    # wait until worker is ready
+                    for i in range(10):
+                        if not worker.is_working():
+                            break
+                        yield CB_TIME
+                    else: # tired of waiting
+                        worker = Worker() # kill and replace
+
+                    yield from yield_from_while(compile_task(worker),
+                        lambda: state.running and not state.compile_needed)
+                    if not state.running:
+                        raise FailureException('Programm aborted.')
+                    set_status_bar_text('Programm running.')
+
+                else:
+                    yield from yield_from_while(show_task(worker),
+                        lambda: state.running and not state.compile_needed)
+                    if not state.running:
+                        raise FailureException('Programm aborted.')
         except FailureException as e:
             output_buffer.set_text(e.error)
+            # Pause playing
+            if state.playing:
+                state.switch_playing(None)
         del worker
-        set_status_bar_text('No programm running.')
-        if state.engine == Please.Restart:
-            state.engine = Please.Run
+        if not state.running:
+            set_status_bar_text('No program running.')
         else:
-            state.engine = Please.Idle
+            set_status_bar_text('An error occured, program temporarily paused.')
+        yield None
 
 state.loop = Loop(main_task)
 
-def run_task():
-    print('run_file')
-    set_status_bar_text('Programm starting.')
+def compile_task(worker):
+    print('COMPILE')
     if state.file_name is None:
         raise FailureException('File name missing.')
 
     code = input_buffer.get_text(input_buffer.get_start_iter(), input_buffer.get_end_iter(), True)
-    with open(state.file_name, 'w') as f:
-        f.write(code)
-    yield CB_TIME
 
-    stdout, stderr, exitcode = mypy.api.run([state.file_name, '--config-file','mypy_user.ini'])
-    result = stdout+stderr
-
-    if result != '':
-        raise FailureException(str(result).replace('\n', '\n\n'))
-    yield CB_TIME
-
-
-    worker = Worker(code, state.file_name)
+    worker.send(CompileRequest(code, state.file_name))
     response = worker.recv()
     while response == None:
         print('karju')
@@ -107,8 +116,6 @@ def run_task():
 
     assert isinstance(response, InitSuccess)
     output_buffer.set_text('')
-    set_status_bar_text('Programm running.')
-    return worker
 
 def show_task(worker):
     while True:
@@ -128,7 +135,7 @@ def play_task(worker):
         scale.set_value(round(scale.get_value()+ FRAME_TIME /1000, 2))
         target_time = get_time() + FRAME_TIME/1000
         if scale.get_value() >= 10:
-            state.play(None)
+            state.switch_playing(None)
 
 
 def update_task(worker, target_time = 0):
@@ -138,8 +145,6 @@ def update_task(worker, target_time = 0):
     while True:
         response = worker.recv()
         if isinstance(response, Failure):
-            print('VIGA<', response.error, '>VIGA')
-            state.playing = False
             raise FailureException(response.error)
         elif isinstance(response, Success):
             successful_response = response

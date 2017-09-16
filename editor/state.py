@@ -8,7 +8,8 @@ import webbrowser
 
 import cairo
 from gi.repository import Gdk
-from worker import Request, Zoom
+import mypy
+from worker import DrawRequest, Zoom
 #from audio import Audio
 import dir_tools
 # NB: There is one more import in the middle of this file.
@@ -17,20 +18,17 @@ import dir_tools
 # Some globals.
 file_name = None #type: Optional[str]
 buffer_surface = cairo.ImageSurface(cairo.FORMAT_ARGB32, 100, 100)
-request = Request(0, 200, 200, Zoom(40, (-4,-4)), False)
+request = DrawRequest(0, 200, 200, Zoom(40, (-4,-4)), False)
+compile_needed = False
 
 
-# Variables to direct control flow in generators.
-class Please(Enum): Run=1; Idle=2; Restart=3
-engine = Please.Idle
+
+running = False
 playing = False
 
 # We can't initialize it right now, because loop.py needs to access globals
 # defined in this file.
 loop = None
-
-def update(_):
-    loop.start()
 
 def draw(widget, cr):
     cr.set_source_rgb(1,1,1)
@@ -38,34 +36,20 @@ def draw(widget, cr):
     cr.set_source_surface(buffer_surface)
     cr.paint()
 
-def run_engine(_):
-    global engine
-    if engine == Please.Idle:
-        engine = Please.Run
-    elif engine == Please.Run:
-        engine = Please.Restart
-    loop.start()
-
-def abort_engine(_):
-    global engine
-    engine = Please.Idle
-    loop.start()
-
-def resize(widget, event):
+def change_size(widget, event):
     global request
-    print('resize')
     request.x = event.width
     request.y = event.height
     loop.start()
 
-def retime(widget):
+def change_time(widget):
     global request
     request.t = scale.get_value()
     loop.start()
 
-def rezoom(widget, event):
+def change_zoom(widget, event):
     global request
-    if engine == Please.Run:
+    if running:
         if event.direction == Gdk.ScrollDirection.UP:
             if request.zoom.k < 5000:
                 request.zoom.combine(Zoom(1.1, (event.x, event.y)))
@@ -76,7 +60,7 @@ def rezoom(widget, event):
         loop.start()
 
 
-def remotion(widget, event):
+def drag_handler(widget, event):
     global last_x, last_y # used in this function only
     if event.type == Gdk.EventType.BUTTON_PRESS:
         last_x = event.x
@@ -91,11 +75,11 @@ def remotion(widget, event):
 
 
 
-def regrid(_):
+def grid_callback(_):
     global request
     request.grid = grid_button.get_active()
     loop.start()
-def home(_):
+def home_callback(_):
     global request
     request.zoom.k = 40
     request.zoom.b_x = request.x/2
@@ -130,15 +114,39 @@ def open_file(widget):
             input_buffer.set_text(f.read())
         file_name = name
         file_label.set_text(os.path.basename(name))
-
+        if running:
+            switch_running(None)
+        if playing:
+            switch_playing(None)
     dialog.destroy()
 
 def save_file(widget):
     print('Turvalisuse põhjustel pole teostatud.')
 
+# TODO: The result gets overwritten if playing is True. 
+def typecheck(_):
+    if playing: switch_playing(None)
+    if running: switch_running(None)
+    loop.start()
+
+    if file_name is None:
+        output_buffer.set_text('File name missing.')
+        return
+
+    code = input_buffer.get_text(input_buffer.get_start_iter(), input_buffer.get_end_iter(), True)
+    with open(file_name, 'w') as f:
+        f.write(code)
+
+    stdout, stderr, exitcode = mypy.api.run([file_name, '--config-file','mypy_user.ini'])
+    result = stdout+stderr
+    if result == '':
+        result = 'Typecheck: No errors were found.'
+
+    output_buffer.set_text(str(result).replace('\n', '\n\n'))
+
 def show_help(_):
     webbrowser.open(os.path.abspath('../docs/_build/index.html'))
-def play(_):
+def switch_playing(_):
     global playing
     playing = not playing
     if playing:
@@ -147,23 +155,42 @@ def play(_):
         play_button.set_image(play_icon)
     loop.start()
 
+def switch_running(_):
+    global running
+    if not running:
+        running = True
+        run_button.set_stock_id('gtk-stop')
+        run_button.set_label('Abort')
+    else:
+        running = False
+        run_button.set_stock_id('gtk-execute')
+        run_button.set_label('Run')
+    loop.start()
+
 drawing_area.set_events(Gdk.EventMask.SCROLL_MASK |
                         Gdk.EventMask.BUTTON_PRESS_MASK |
                         Gdk.EventMask.BUTTON_MOTION_MASK)
 
+def compile_buffer(buffer, start, end):
+    global compile_needed
+    compile_needed = True
+    if running:
+        loop.start()
+
 # Connect events with callbacks.
-play_button.connect('clicked', play)
-run_button.connect('clicked', run_engine)
-abort_button.connect('clicked', abort_engine)
+play_button.connect('clicked', switch_playing)
+run_button.connect('clicked', switch_running)
+input_buffer.connect('highlight-updated', compile_buffer)
 save_button.connect('activate', save_file)
 open_button.connect('activate', open_file)
 export_button.connect('clicked', export)
-grid_button.connect('clicked', regrid)
-home_button.connect('clicked', home)
+grid_button.connect('clicked', grid_callback)
+home_button.connect('clicked', home_callback)
+typecheck_button.connect('clicked', typecheck)
 help_button.connect('clicked', show_help)
 drawing_area.connect('draw', draw)
-drawing_area.connect('configure-event', resize)
-drawing_area.connect('scroll-event', rezoom)
-drawing_area.connect('button-press-event', remotion)
-drawing_area.connect('motion-notify-event', remotion)
-scale.connect('value-changed', retime)
+drawing_area.connect('configure-event', change_size)
+drawing_area.connect('scroll-event', change_zoom)
+drawing_area.connect('button-press-event', drag_handler)
+drawing_area.connect('motion-notify-event', drag_handler)
+scale.connect('value-changed', change_time)
