@@ -8,6 +8,7 @@ import webbrowser
 
 import cairo
 from gi.repository import Gdk
+import mypy
 from worker import DrawRequest, Zoom
 #from audio import Audio
 import dir_tools
@@ -122,6 +123,27 @@ def open_file(widget):
 def save_file(widget):
     print('Turvalisuse põhjustel pole teostatud.')
 
+# TODO: The result gets overwritten if playing is True. 
+def typecheck(_):
+    if playing: switch_playing(None)
+    if running: switch_running(None)
+    loop.start()
+
+    if file_name is None:
+        output_buffer.set_text('File name missing.')
+        return
+
+    code = input_buffer.get_text(input_buffer.get_start_iter(), input_buffer.get_end_iter(), True)
+    with open(file_name, 'w') as f:
+        f.write(code)
+
+    stdout, stderr, exitcode = mypy.api.run([file_name, '--config-file','mypy_user.ini'])
+    result = stdout+stderr
+    if result == '':
+        result = 'Typecheck: No errors were found.'
+
+    output_buffer.set_text(str(result).replace('\n', '\n\n'))
+
 def show_help(_):
     webbrowser.open(os.path.abspath('../docs/_build/index.html'))
 def switch_playing(_):
@@ -164,6 +186,7 @@ open_button.connect('activate', open_file)
 export_button.connect('clicked', export)
 grid_button.connect('clicked', grid_callback)
 home_button.connect('clicked', home_callback)
+typecheck_button.connect('clicked', typecheck)
 help_button.connect('clicked', show_help)
 drawing_area.connect('draw', draw)
 drawing_area.connect('configure-event', change_size)

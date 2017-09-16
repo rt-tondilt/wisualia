@@ -24,6 +24,7 @@ save_button =  builder.get_object("save_button")
 open_button =  builder.get_object("open_button")
 run_button =  builder.get_object("run_button")
 help_button = builder.get_object("help_button")
+typecheck_button = builder.get_object("typecheck_button")
 
 status_bar = builder.get_object("status_bar")
 
