@@ -2,7 +2,7 @@ import wisualia
 from wisualia.shapes import circle, polygon
 from wisualia.modifiers import Move, Rotate
 from wisualia.animation import animate
-
+wisualia.animation.DURATION = 20
 
 
 def loop(t):

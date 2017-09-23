@@ -62,7 +62,8 @@ class CompileRequest(object):
 class Response(object):
     pass
 class InitSuccess(Response):
-    def __init__(self, audio_file_name: str):
+    def __init__(self,animation_duration: float, audio_file_name: str):
+        self.animation_duration = animation_duration
         self.audio_file_name = audio_file_name
 class Success(Response):
     def __init__(self, data: BytesImage, result: str) -> None:
@@ -78,7 +79,7 @@ def worker_fn(con):
     code = None
     while True:
         request = con.recv()
-        
+
         if isinstance(request, CompileRequest):
 
             sys.path[0]=os.path.dirname(request.file_name)
@@ -88,11 +89,14 @@ def worker_fn(con):
             try:
                 code = compile(request.code, request.file_name, 'exec')
                 exec(code, vars)
+                animation_duration = vars['wisualia'].animation.DURATION
                 audio_file_name = vars['wisualia'].animation.AUDIO
+                assert (isinstance(animation_duration, float) or
+                        isinstance(animation_duration, int))
             except Exception:
                 con.send(Failure(get_error()))
                 continue
-            con.send(InitSuccess(audio_file_name)) # Succesful init
+            con.send(InitSuccess(animation_duration, audio_file_name))
             # TODO: Check whether wisualia was properly imported.
 
         elif isinstance(request, DrawRequest):

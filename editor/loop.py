@@ -5,7 +5,7 @@ import os
 from time import perf_counter as get_time
 
 import mypy.api
-from gi.repository import GLib
+from gi.repository import GLib, Gtk
 import state
 from gui import input_buffer, output_buffer, set_status_bar_text, drawing_area, scale
 from worker import Worker, InitSuccess, Success, Failure, CompileRequest, DrawRequest
@@ -115,6 +115,7 @@ def compile_task(worker):
         raise FailureException(response.error)
 
     assert isinstance(response, InitSuccess)
+    scale.set_adjustment(Gtk.Adjustment(0,0,response.animation_duration))
     output_buffer.set_text('')
 
 def show_task(worker):
@@ -134,7 +135,7 @@ def play_task(worker):
         yield from ut
         scale.set_value(round(scale.get_value()+ FRAME_TIME /1000, 2))
         target_time = get_time() + FRAME_TIME/1000
-        if scale.get_value() >= 10:
+        if scale.get_value() >= scale.get_adjustment().get_upper():
             state.switch_playing(None)
 
 
