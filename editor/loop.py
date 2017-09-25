@@ -7,6 +7,7 @@ from time import perf_counter as get_time
 import mypy.api
 from gi.repository import GLib, Gtk
 import state
+import audio
 from gui import input_buffer, output_buffer, set_status_bar_text, drawing_area, scale
 from worker import Worker, InitSuccess, Success, Failure, CompileRequest, DrawRequest
 from dir_tools import get_dir
@@ -85,7 +86,7 @@ def main_task():
                         raise FailureException('Programm aborted.')
         except FailureException as e:
             output_buffer.set_text(e.error)
-            # Pause playing
+            audio.stop()
             if state.playing:
                 state.switch_playing(None)
         del worker
@@ -115,6 +116,7 @@ def compile_task(worker):
         raise FailureException(response.error)
 
     assert isinstance(response, InitSuccess)
+    audio.set_file(response.audio_file_name, state.file_name)
     scale.set_adjustment(Gtk.Adjustment(0,0,response.animation_duration))
     output_buffer.set_text('')
 
@@ -130,19 +132,25 @@ def show_task(worker):
 
 def play_task(worker):
     target_time = get_time()
+    yield from update_task(worker, target_time)
+    audio.play_from(scale.get_value())
     while state.playing:
-        ut = update_task(worker, target_time)
-        yield from ut
+        target_time = target_time + FRAME_TIME/1000
         scale.set_value(round(scale.get_value()+ FRAME_TIME /1000, 2))
-        target_time = get_time() + FRAME_TIME/1000
+        lagging = yield from update_task(worker, target_time)
+
         if scale.get_value() >= scale.get_adjustment().get_upper():
             state.switch_playing(None)
+        if lagging:
+            target_time = get_time() + FRAME_TIME/1000
+            audio.play_from(scale.get_value())
 
 
 def update_task(worker, target_time = 0):
     successful_response = None
     print('update_task')
     worker.send(state.request)
+    lagging = False
     while True:
         response = worker.recv()
         if isinstance(response, Failure):
@@ -150,12 +158,17 @@ def update_task(worker, target_time = 0):
         elif isinstance(response, Success):
             successful_response = response
             break
+        if target_time < get_time():
+            lagging = True
+            audio.stop()
         yield CB_TIME
+
     while True:
         current_time = get_time()
         if target_time < current_time:
             state.buffer_surface = successful_response.data.get_surface() #type: ignore
             output_buffer.set_text(successful_response.result)
             drawing_area.queue_draw()
-            return
+            break
         yield CB_TIME
+    return lagging

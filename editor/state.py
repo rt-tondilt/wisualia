@@ -10,7 +10,7 @@ import cairo
 from gi.repository import Gdk
 import mypy
 from worker import DrawRequest, Zoom
-#from audio import Audio
+import audio
 import dir_tools
 # NB: There is one more import in the middle of this file.
 
@@ -44,7 +44,10 @@ def change_size(widget, event):
 
 def change_time(widget):
     global request
-    request.t = scale.get_value()
+    time = scale.get_value()
+    request.t = time
+    if playing:
+        audio.try_play_from(time)
     loop.start()
 
 def change_zoom(widget, event):
@@ -123,7 +126,7 @@ def open_file(widget):
 def save_file(widget):
     print('Turvalisuse põhjustel pole teostatud.')
 
-# TODO: The result gets overwritten if playing is True. 
+# TODO: The result gets overwritten if playing is True.
 def typecheck(_):
     if playing: switch_playing(None)
     if running: switch_running(None)

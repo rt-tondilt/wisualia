@@ -70,10 +70,16 @@ def animate(loop_fn: Callable[[float], None]) -> None:
             im = im[::-1]
         return im if transparent else im[:,:, :3]
 
-    clip = mpy.VideoClip(make_frame, duration=DURATION)
     name = os.path.splitext(__main__.__file__)[0]+ '.mp4'
     try:
-        clip.write_videofile(name,fps=FPS, audio=False)
+        if AUDIO is not None:
+            audio = mpy.AudioFileClip(AUDIO)
+            audio.duration = DURATION
+        else:
+            audio = None
+        clip = mpy.VideoClip(make_frame, duration=DURATION)
+        clip.audio = audio
+        clip.write_videofile(name,fps=FPS, audio=True)
     except Exception as e:
         print()
         print('ERROR WHILE WRITING VIDEO')
