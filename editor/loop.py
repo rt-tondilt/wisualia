@@ -24,12 +24,15 @@ class Loop(object):
     def __init__(self, generator):
         self.generator = generator()
         self.callback_time = None #type: Optional[int]
+        self.generator_running = False
     def start(self):
-        if self.callback_time == None:
+        if self.callback_time == None and not self.generator_running:
             self.run()
     # PRIVATE METHOD
     def run(self):
+        self.generator_running = True
         new_callback_time = next(self.generator)
+        self.generator_running = False
         if new_callback_time != self.callback_time:
             self.callback_time = new_callback_time
             if self.callback_time != None:
