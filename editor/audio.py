@@ -14,6 +14,11 @@ def set_file(audio_file_name: Optional[str], program_path: str):
     os.chdir(os.path.dirname(program_path))
     print(audio_file_name, program_path)
     try:
+        # pyglet.media.load(None) crashes.
+        # According to MS event viewer:
+        #     "Faulting module name: msvcrt.dll, version: 7.0.15063.0"
+        # TODO: Investigate more.
+        assert isinstance(audio_file_name, str)
         music = pyglet.media.load(audio_file_name)
         player.next_source()
         player.queue(music)
