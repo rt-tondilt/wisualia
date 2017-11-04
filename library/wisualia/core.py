@@ -1,5 +1,6 @@
 from abc import ABCMeta, abstractmethod
 from typing import Any
+import inspect
 
 import cairo #type: ignore
 
@@ -18,6 +19,32 @@ class Modifier(metaclass = ABCMeta):
     @abstractmethod
     def modify(self, cr): #type: ignore
         pass
+
+def derive_repr(cls): #type:ignore
+    '''Decorator that derives __repr__ method based on class initializer arguments.
+
+    For example the following class
+        @derive_repr
+        class Example(object):
+            def __init__(self, a, b):
+                self.a = a
+                self.b = b
+    would generate a __repr__ method with behaviour identical to:
+        def __repr__(self):
+            return 'Example({}, {})'.format(self.a, self.b)
+
+    derive_repr does not read the source code of the initializer and does not
+    know wheter the class has parameters named a and b. Therefore it should only
+    be used on relatively "struct-like" classes.
+    '''
+    arg_names = list(inspect.signature(cls).parameters.keys())
+    format_str = '{}({})'.format(cls.__name__, ', '.join('{}' for _ in arg_names))
+    get_params_str = repr(['self.'+n for n in arg_names]).replace("'","")
+    get_params = compile(get_params_str, 'core.py', 'eval')
+    def representation(self): #type:ignore
+        return format_str.format(*eval(get_params))
+    cls.__repr__ = representation
+    return cls
 
 def _draw_grid(cr, step, zoom_b_x, zoom_b_y, width, height): #type:ignore
     x = zoom_b_x

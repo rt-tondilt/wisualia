@@ -4,6 +4,7 @@ from math import pi
 
 from wisualia import core
 from wisualia.patterns import Pattern, RGBA,  RED, GREEN, BLUE
+from wisualia.core import derive_repr
 
 class LineJoin(IntEnum):
     MITER = 0
@@ -13,11 +14,12 @@ class LineCap(IntEnum):
     BUTT = 0
     ROUND = 1
     SQUARE = 2
+@derive_repr
 class Dash(object):
     def __init__(self, dashes:List[float], offset:int=0) -> None:
         self.dashes = dashes
         self.offset = offset
-
+@derive_repr
 class Stroke(object):
     def __init__(self,
                  width:float=0.1,

@@ -1,7 +1,8 @@
 from typing import Tuple
-from wisualia.core import Modifier
+from wisualia.core import Modifier, derive_repr
 from math import radians
 
+@derive_repr
 class Move(Modifier):
     def __init__(self, x:float, y:float) -> None:
         self.x = x
@@ -9,6 +10,7 @@ class Move(Modifier):
     def modify(self, cr): #type: ignore
         cr.translate(self.x, self.y)
 
+@derive_repr
 class Rotate(Modifier):
     def __init__(self, degrees:float, centre:Tuple[float, float]=(0, 0)) -> None:
         self.degrees = degrees
@@ -18,6 +20,7 @@ class Rotate(Modifier):
         cr.rotate(radians(self.degrees))
         cr.translate(-self.centre[0], -self.centre[1])
 
+@derive_repr
 class Scale(Modifier):
     def __init__(self, factors:Tuple[float, float], centre:Tuple[float, float]=(0, 0)) -> None:
         self.factors = factors

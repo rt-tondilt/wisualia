@@ -9,6 +9,7 @@ import colorsys
 import cairo #type: ignore
 from wisualia import core
 from wisualia.image import Image
+from wisualia.core import derive_repr
 
 
 
@@ -35,10 +36,7 @@ class Pattern(object):
         cr.set_source(self.cairo_pattern)
         cr.set_matrix(m)
 
-'''
-See tekst on siin vahel lollakas.
-'''
-
+@derive_repr
 class RGBA(Pattern):
     '''
     Args:
@@ -63,9 +61,6 @@ class RGBA(Pattern):
         return self.r, self.g, self.b, self.a
     def _use_as_source_on(self, cr): #type: ignore
         cr.set_source(cairo.SolidPattern(*self.get_rgba()))
-
-
-
 
 def HSVA(h:float, s:float=1, v:float=1, a:float=1) -> RGBA:
     '''
