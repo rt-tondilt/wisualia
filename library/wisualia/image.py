@@ -15,7 +15,7 @@ class Image(object):
         cr.set_source(cairo.SurfacePattern(self.surf))
         cr.paint()
         return copy
-    def write_to_png(self, name: str):
+    def write_to_png(self, name: str) -> None:
         self.surf.write_to_png(name)
     @classmethod
     def from_cairo_surface(cls, cairo_surface) -> 'Image': #type: ignore

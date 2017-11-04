@@ -19,7 +19,7 @@ class Modifier(metaclass = ABCMeta):
     def modify(self, cr): #type: ignore
         pass
 
-def _draw_grid(cr, step, zoom_b_x, zoom_b_y, width, height):
+def _draw_grid(cr, step, zoom_b_x, zoom_b_y, width, height): #type:ignore
     x = zoom_b_x
     y = zoom_b_y
     right = width
