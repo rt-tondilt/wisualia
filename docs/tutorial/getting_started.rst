@@ -81,8 +81,8 @@ Fill and Stroke
 ---------------
 
 The third argument of circle is a Pattern named fill. A pattern is a virtual
-"paint" that is used to draw things. Here is an example of usage of RGBA
-pattern.
+"paint" that is used to draw things. Patterns live in
+:py:mod:`wisualia.patterns` module. Here is an example of usage of RGBA pattern.
 
 .. testcode:: first_fill
 
@@ -139,6 +139,77 @@ is drawn. As we saw before, this argument defaults to :py:obj:`None`.
   wisualia_x.core.image.write_to_png('_images/first_stroke.png')
 
 .. image:: /_images/first_stroke.png
+
+.. note::
+
+  In Wisualia functions that draw something (mainly in
+  :py:mod:`wisualia.shapes`) there is a convention for the order of
+  arguments. Allthough all arguments can be reffered by a keyword and in any
+  order, the following order is highly recommended:
+
+  1. Arguments defining the geometry of the shape. These are usually used as
+     positional arguments.
+  2. The fill of the shape, usually used as a keyword argument.
+  3. The stroke of the shape, usually used as a keyword argument.
+
+  Fill and stroke are usually optional (in other words they can be :py:obj:`None`), but
+  the default fill value is something visible for quick prototyping. Geometry
+  related arguments may have default values as well, they default to shapes
+  inside ``-1 <= x <= 1`` and ``-1 <= y <=1``.
+
+Loading images
+----------------
+
+Lets draw the following image :download:`example.png`. Here is a minimal
+solution.
+
+.. testcode:: first_image
+
+  import wisualia
+  from wisualia.image import Image
+  from wisualia.patterns import ImagePattern
+  from wisualia.shapes import paint
+
+  # We load the file outside of the loop function, to make looping faster.
+  # Here the image is inside tutorial folder for technical reasons.
+  # Normally you would open image in the same folder, like
+  # image = Image.from_png('example.png')
+  image = Image.from_png('tutorial/example.png')
+
+  def loop(t):
+      paint(ImagePattern(image, pixels_per_unit=80))
+
+.. testcleanup:: first_image
+
+  loop(1)
+  wisualia_x.core.image.write_to_png('_images/first_image.png')
+
+.. image:: /_images/first_image.png
+
+ImagePatter is a pattern, which means that we can use shapes to crop images.
+
+.. testcode:: second_image
+
+  import wisualia
+  from wisualia.image import Image
+  from wisualia.patterns import ImagePattern
+  from wisualia.shapes import circle
+
+  image = Image.from_png('tutorial/example.png')
+
+  def loop(t):
+      circle(fill=ImagePattern(image, pixels_per_unit=80))
+
+.. testcleanup:: second_image
+
+  loop(1)
+  wisualia_x.core.image.write_to_png('_images/second_image.png')
+
+.. image:: /_images/second_image.png
+
+This looks still quite ugly, the image is inside the first quadrant of the
+plane. We will fix that in the transformations tutorial.
+
 
 Exporting animations
 --------------------

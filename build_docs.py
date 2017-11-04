@@ -5,7 +5,7 @@ import subprocess
 
 help_text='''
 Wisualia documentation generation script
-====================================
+========================================
 
 This script generates Wisualia documentation. You can run this script with any
 Python interpreter: native CPython or the one that comes with Wisualia.
