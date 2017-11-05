@@ -1,4 +1,4 @@
-from typing import Tuple, List
+from typing import Tuple, List, Optional
 from abc import ABCMeta, abstractmethod
 from enum import Enum
 from math import radians
@@ -83,7 +83,7 @@ class Path(object):
 
 
 class Pencil(object):
-    def __init__(self,  fill:Pattern=RED, stroke:Stroke=Stroke()) -> None:
+    def __init__(self,  fill:Optional[Pattern]=RED, stroke:Optional[Stroke]=Stroke()) -> None:
         self.stroke = stroke
         self.fill = fill
         self.path = Path()

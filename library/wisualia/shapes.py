@@ -38,18 +38,21 @@ class Stroke(object):
         cr.set_line_cap(self.cap)
         cr.set_dash(self.dash.dashes, self.dash.offset)
 
-def _fill_and_stroke(fill:Pattern, stroke:Optional[Stroke], cr) -> None: #type: ignore
-    fill._use_as_source_on(cr)
-    if stroke is not None:
+def _fill_and_stroke(fill:Optional[Pattern], stroke:Optional[Stroke], cr) -> None: #type: ignore
+    if fill is not None:
+        fill._use_as_source_on(cr)
+        if stroke is None:
+            cr.fill()
+            return
         cr.fill_preserve()
+    if stroke is not None:
         stroke.pattern._use_as_source_on(cr)
         stroke._use_shape(cr)
         cr.stroke()
-    else:
-        cr.fill()
+
 def rect(point1:Tuple[float, float],
          point2:Tuple[float, float],
-         fill:Pattern=GREEN,
+         fill:Optional[Pattern]=GREEN,
          stroke:Optional[Stroke]=None) -> None:
     cr = core.context
     cr.save()
@@ -59,7 +62,7 @@ def rect(point1:Tuple[float, float],
 
 def circle(centre:Tuple[float, float]=(0, 0),
            radius:float=1,
-           fill:Pattern=GREEN,
+           fill:Optional[Pattern]=GREEN,
            stroke:Optional[Stroke]=None) -> None:
     '''
     Args:
@@ -79,7 +82,7 @@ def circle(centre:Tuple[float, float]=(0, 0),
     cr.restore()
 
 def polygon(*points: Tuple[float, float],
-            fill:Pattern=RED,
+            fill:Optional[Pattern]=RED,
             stroke:Optional[Stroke]=None) -> None:
     cr = core.context
     cr.save()
