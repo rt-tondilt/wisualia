@@ -23,17 +23,20 @@ class Modifier(metaclass = ABCMeta):
 def derive_repr(cls): #type:ignore
     '''Decorator that derives __repr__ method based on class initializer arguments.
 
-    For example the following class
+    For example the following class ::
+
         @derive_repr
         class Example(object):
             def __init__(self, a, b):
                 self.a = a
                 self.b = b
-    would generate a __repr__ method with behaviour identical to:
+
+    would generate a __repr__ method with behaviour identical to ::
+
         def __repr__(self):
             return 'Example({}, {})'.format(self.a, self.b)
 
-    derive_repr does not read the source code of the initializer and does not
+    @derive_repr does not read the source code of the initializer and does not
     know wheter the class has parameters named a and b. Therefore it should only
     be used on relatively "struct-like" classes.
     '''
