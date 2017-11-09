@@ -77,6 +77,7 @@ class Failure(Response):
 
 def worker_fn(con):
     code = None
+    wisualia = None
     while True:
         request = con.recv()
 
@@ -87,12 +88,18 @@ def worker_fn(con):
             assert isinstance(request.code, str)
             vars = {} # type: Dict[str, Any]
             try:
+                # Forget any previous animation configuration
+                if wisualia != None:
+                    wisualia.animation.ANIMATION = None
+                
                 code = compile(request.code, request.file_name, 'exec')
                 exec(code, vars)
-                animation_duration = vars['wisualia'].animation.DURATION
-                audio_file_name = vars['wisualia'].animation.AUDIO
+                wisualia = vars['wisualia']
+                animation_duration = vars['wisualia'].animation.ANIMATION.duration
+                audio_file_name = vars['wisualia'].animation.ANIMATION.audio
                 assert (isinstance(animation_duration, float) or
                         isinstance(animation_duration, int))
+                assert isinstance(audio_file_name, str) or audio_file_name == None
             except Exception:
                 con.send(Failure(get_error()))
                 continue
@@ -120,7 +127,7 @@ def worker_fn(con):
                 with redirect_stdout(f):
                     vars['loop'](request.t)
                 result = f.getvalue()
-                vars['wisualia'].animation.CAMERA.draw(cr)
+                vars['wisualia'].animation.ANIMATION.camera.draw(cr)
             except Exception :
                 con.send(Failure(get_error()))
                 return

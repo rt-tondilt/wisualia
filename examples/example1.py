@@ -2,8 +2,6 @@ import wisualia
 from wisualia.shapes import circle, polygon,Stroke
 from wisualia.modifiers import Move, Rotate
 from wisualia.animation import animate
-wisualia.animation.DURATION = 20
-
 
 def loop(t):
     with Move(0,t):
@@ -18,4 +16,4 @@ def loop(t):
     print('KONN')
     
 
-animate(loop)
+animate(loop, duration=20)

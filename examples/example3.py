@@ -3,7 +3,7 @@ from wisualia.shapes import circle
 from wisualia.modifiers import Move, Rotate
 from wisualia.patterns import ImagePattern, RGBA
 from wisualia.image import Image
-from wisualia import animation
+from wisualia.animation import animate, Camera
 imag = Image.from_png('example.png')
 
 def loop(t):
@@ -27,5 +27,5 @@ def loop(t):
         circle((0,4),1, white)
         circle((0,-4),1, black)
 
-animation.CAMERA = animation.Camera((20,20), 40)
-animation.animate(loop)
+
+animate(loop, camera=Camera((20,20), 40))
