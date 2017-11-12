@@ -1,6 +1,6 @@
 import wisualia
 from wisualia.shapes import circle
-from wisualia import animation
+from wisualia.animation import animate
 
 
 def loop(t):
@@ -10,4 +10,4 @@ def loop(t):
     circle((40, 40), 20)
 
 
-animation.animate(loop)
+animate(loop)

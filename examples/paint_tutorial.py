@@ -3,7 +3,7 @@ from wisualia.shapes import circle, paint
 from wisualia.modifiers import Rotate, Move
 from wisualia.patterns import ImagePattern, RGBA
 from wisualia.image import Image
-from wisualia import animation
+from wisualia.animation import animate
 
 # We open a png image outside of loop() to keep programm fast.
 imag = Image.from_png('example.png')
@@ -84,6 +84,4 @@ def loop(t):
                         circle((x/1.5,y/1.5), 0.3, pattern)
 
 
-
-
-animation.animate(loop)
+animate(loop)

@@ -3,7 +3,7 @@ from wisualia.shapes import circle
 from wisualia.patterns import RGBA, ImagePattern, LinearGradient, RadialGradient
 from wisualia.pencil import Pencil, Path
 from wisualia.image import Image
-from wisualia import animation
+from wisualia.animation import animate
 
 
 im = Image.from_png('example.png')
@@ -27,4 +27,4 @@ def loop(t):
     p.line_to(-3,0)
     p.draw_fill(RGBA(0,1,0))
 
-animation.animate(loop)
+animate(loop)

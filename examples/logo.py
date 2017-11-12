@@ -4,7 +4,7 @@ from wisualia.modifiers import Move
 from wisualia.patterns import RGBA, ImagePattern, LinearGradient, RadialGradient
 from wisualia.pencil import Path, Pencil
 from wisualia.image import Image
-from wisualia import animation
+from wisualia.animation import animate
 
 import random
 from math import sqrt
@@ -60,8 +60,4 @@ def loop(t):
     #draw_noise()
     draw_buf(buf, g)
     
-                
-            
-    
-
-animation.animate(loop)
+animate(loop)

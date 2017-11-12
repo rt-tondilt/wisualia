@@ -3,7 +3,7 @@ from wisualia.shapes import circle, paint
 from wisualia.patterns import RGBA, ImagePattern, LinearGradient, RadialGradient
 from wisualia.pencil import Pencil
 from wisualia.image import Image, RedirectDrawingTo
-from wisualia import animation
+from wisualia.animation import animate
 
 imi = Image.from_png('example.png')
 def loop(t):
@@ -18,4 +18,4 @@ def loop(t):
     ip = ImagePattern(im, pixels_per_unit=40)
     paint(ip, alpha=1)
 
-animation.animate(loop)
+animate(loop)

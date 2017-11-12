@@ -4,7 +4,7 @@ from wisualia.modifiers import Scale, Rotate
 from wisualia.patterns import RGBA, ImagePattern, LinearGradient, RadialGradient
 from wisualia.pencil import Pencil
 from wisualia.image import Image
-from wisualia import animation
+from wisualia.animation import animate
 
 im = Image.from_png('example.png')
 def loop(t):
@@ -35,4 +35,4 @@ def loop(t):
             a,b,c,d = p.fill_extents()
             rect((a,b),(c,d),fill=RGBA(0.2,0,0,0.3))
     
-animation.animate(loop)
+animate(loop)

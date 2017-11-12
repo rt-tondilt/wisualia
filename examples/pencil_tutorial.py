@@ -4,7 +4,7 @@ from wisualia.modifiers import Move, Scale, Rotate
 from wisualia.patterns import ImagePattern, RGBA
 from wisualia.image import Image
 from wisualia.pencil import Pencil
-from wisualia import animation
+from wisualia.animation import animate
 
 # We open a png image outside of loop() to keep programm fast.
 
@@ -115,6 +115,4 @@ def loop(t):
                 
                         
             
-        
-
-animation.animate(loop)
+animate(loop)
