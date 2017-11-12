@@ -91,7 +91,7 @@ def worker_fn(con):
                 # Forget any previous animation configuration
                 if wisualia != None:
                     wisualia.animation.ANIMATION = None
-                
+
                 code = compile(request.code, request.file_name, 'exec')
                 exec(code, vars)
                 wisualia = vars['wisualia']
@@ -125,7 +125,7 @@ def worker_fn(con):
                 vars['wisualia'].core.image = vars['wisualia'].image.Image.from_cairo_surface(surf)
                 f = StringIO()
                 with redirect_stdout(f):
-                    vars['loop'](request.t)
+                    vars['wisualia'].animation.ANIMATION.loop_fn(request.t)
                 result = f.getvalue()
                 vars['wisualia'].animation.ANIMATION.camera.draw(cr)
             except Exception :
