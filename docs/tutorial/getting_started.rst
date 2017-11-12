@@ -11,18 +11,23 @@ follow these rules:
 * The file must import Wisualia library like ``import wisualia``. The editor finds imported
   library by it's name so ``from wisualia import *`` and ``import wisualia as othername``
   do not work.
-* The file must define a function named ``loop`` that takes a float as an
-  argument. This function will be called each time a new frame needs to be drawn.
-  The argument is the current time from the start of the animation in seconds.
+* The file must call :py:func:`wisualia.animation.animate`.The first argument of
+  this function is another function usually called a loop function.
+* The loop function will be called each time a new frame needs to be drawn.
+  The only argument of the loop function is the current time from the start of
+  the animation in seconds.
 
 Here is an example of minimal proper Wisualia file.
 
 .. testcode::
 
   import wisualia
+  from wisualia.animation import animate
 
   def loop(time):
       pass
+
+  animate(loop)
 
 Note that this file does nothing by itself, for real animation we have to add
 something to draw.
@@ -30,10 +35,13 @@ something to draw.
 .. testcode:: first_circle
 
   import wisualia
+  from wisualia.animation import animate
   from wisualia.shapes import circle
 
   def loop(time):
       circle()
+
+  animate(loop)
 
 .. testcleanup:: first_circle
 
@@ -56,11 +64,14 @@ Knowing that we can already do some animation.
 .. testcode:: second_circle
 
   import wisualia
+  from wisualia.animation import animate
   from wisualia.shapes import circle
 
   def loop(time):
       circle((2, time/5), time/10)
       circle((-1, time/5), time/10)
+
+  animate(loop)
 
 .. testcleanup:: second_circle
 
@@ -87,6 +98,7 @@ The third argument of circle is a Pattern named fill. A pattern is a virtual
 .. testcode:: first_fill
 
   import wisualia
+  from wisualia.animation import animate
   from wisualia.shapes import circle
   from wisualia.patterns import RGBA
 
@@ -94,6 +106,8 @@ The third argument of circle is a Pattern named fill. A pattern is a virtual
       circle((0,0), 1, fill=RGBA(0, 0, 1, 1))
       circle((0,0), 0.2, fill=RGBA(0, 0, 0))
       circle((1,0), 0.5, fill=RGBA(1, 0, 0, 0.5))
+
+  animate(loop)
 
 .. testcleanup:: first_fill
 
@@ -113,6 +127,7 @@ is drawn. As we saw before, this argument defaults to :py:obj:`None`.
 .. testcode:: first_stroke
 
   import wisualia
+  from wisualia.animation import animate
   from wisualia.shapes import circle, Stroke
   from wisualia.patterns import RGBA
 
@@ -132,6 +147,8 @@ is drawn. As we saw before, this argument defaults to :py:obj:`None`.
       circle(( 2,0), 2,
              fill=RGBA(0,0,0,0),
              stroke=Stroke(width=0.2, pattern=redish))
+
+  animate(loop)
 
 .. testcleanup:: first_stroke
 
@@ -166,6 +183,7 @@ solution.
 .. testcode:: first_image
 
   import wisualia
+  from wisualia.animation import animate
   from wisualia.image import Image
   from wisualia.patterns import ImagePattern
   from wisualia.shapes import paint
@@ -179,6 +197,8 @@ solution.
   def loop(t):
       paint(ImagePattern(image, pixels_per_unit=80))
 
+  animate(loop)
+
 .. testcleanup:: first_image
 
   loop(1)
@@ -191,6 +211,7 @@ ImagePatter is a pattern, which means that we can use shapes to crop images.
 .. testcode:: second_image
 
   import wisualia
+  from wisualia.animation import animate
   from wisualia.image import Image
   from wisualia.patterns import ImagePattern
   from wisualia.shapes import circle
@@ -199,6 +220,8 @@ ImagePatter is a pattern, which means that we can use shapes to crop images.
 
   def loop(t):
       circle(fill=ImagePattern(image, pixels_per_unit=80))
+
+  animate(loop)
 
 .. testcleanup:: second_image
 

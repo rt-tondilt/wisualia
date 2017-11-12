@@ -11,6 +11,7 @@ Here is an example of rotation.
 .. testcode:: first_rotation
 
   import wisualia
+  from wisualia.animation import animate
   from wisualia.shapes import circle
   from wisualia.patterns import RGBA
   from wisualia.modifiers import Rotate
@@ -20,6 +21,8 @@ Here is an example of rotation.
       with Rotate(90):
           circle((1,0), 0.5, fill=RGBA(0,0,1)) #TOP CIRCLE
       circle((0,-1), 0.5, fill=RGBA(0,0,0)) #BOTTOM CIRCLE
+
+  animate(loop)
 
 .. testcleanup:: first_rotation
 
@@ -34,6 +37,7 @@ an arbitrary point.
 .. testcode:: second_rotation
 
   import wisualia
+  from wisualia.animation import animate
   from wisualia.shapes import circle
   from wisualia.patterns import RGBA
   from wisualia.modifiers import Rotate
@@ -42,6 +46,8 @@ an arbitrary point.
       for i in range(10):
           with Rotate(i*36, centre=(-1,0)):
               circle((0,0), i/50+0.1, fill=RGBA(i/10, 0, 1-i/10))
+
+  animate(loop)
 
 .. testcleanup:: second_rotation
 
@@ -56,6 +62,7 @@ first and outer after them. Compare the following shapes.
 .. testcode:: multiple_transformations
 
   import wisualia
+  from wisualia.animation import animate
   from wisualia.shapes import circle, rect, Stroke
   from wisualia.patterns import RGBA
   from wisualia.modifiers import Rotate, Scale
@@ -74,6 +81,8 @@ first and outer after them. Compare the following shapes.
           with Scale((0.5,1)):
               rect((0,-1),(2,0), fill=invisible, stroke=Stroke())
               circle((2,0), 0.3, fill=RGBA(0,0,1))
+
+  animate(loop)
 
 .. testcleanup:: multiple_transformations
 
