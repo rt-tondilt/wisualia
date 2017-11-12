@@ -246,11 +246,11 @@ Exporting animations
   The export button uses this mechanism. In the future exporting a file could be
   as easy as writting ``your_wisualia_file.py animate`` to the console.
 
-Possible mistakes and other suprising behaviour.
-------------------------------------------------
+Possible mistakes and other suprising behaviour
+-----------------------------------------------
 
-Don't change global variables from the loop function. For example the following
-code behaves in quite nonsensical way (try zooming in and out, moving the view
+**Don't change global variables from the loop function.** For example the following
+code behaves in a quite nonsensical way (try zooming in and out, moving the view
 or changing the time).
 
 .. testcode::
@@ -268,8 +268,12 @@ or changing the time).
 
   animate(loop)
 
-Don't change imported modules at runtime. For example lets say that you have
-following code inside the editor and it is displaying a rectangle. ::
+**Don't change imported modules at runtime.** For example lets say that you have
+following code inside the editor and it is displaying a rectangle.
+
+.. The following code is so dangerous, that we can't even doctest it.
+
+::
 
   import wisualia
   from wisualia.animation import animate
@@ -302,60 +306,3 @@ can't really reload already imported modules. That is why we have to restart the
 if we have changed the source code of an imported module or we have changed the
 module at runtime (as we did right now). The easiest way to restart the
 interpreter, is to click the Run/Abort button twice.
-
-Extra section: How does wisualia work?
---------------------------------------
-
-Wisualia uses two Python processes: the GUI process and the worker process for
-running the user code. This ensures that the GUI is always responsible (except
-when typechecking). The worker process handles so called tasks coming from the
-GUI. The types of tasks are:
-
-* Compile new user programm, and initialize it.
-* Draw a new frame using the current view parameters. This means one call to the
-  loop function.
-
-Both of these tasks can take a lot of time and may never finish.
-
-An example of code that never finishes initialization::
-
-  import wisualia
-  from wisualia.animation import animate
-
-  while True:
-      pass
-
-  def loop(time):
-      pass
-
-  animate(loop)
-
-An example of code that never finishes drawing a frame::
-
-  import wisualia
-  from wisualia.animation import animate
-
-  def loop(time):
-      while True:
-          pass
-
-  animate(loop)
-
-To handle such cases there is a Run/Abort button, that can start or kill the
-worker process.
-
-Extra section: Avoid changing global variables from the loop function.
-
-
-
-If the user changes code in the editor window, then the code is sent to the
-worker process, where it is compiled and run. However the worker process may be
-busy and if it can't respond in certain time then the worker process is killed
-and a new worker process is started.
-
-If the old and the new user code are run in the same worker process then certain
-errors can happen. For example if the user accidentaly assigns to
-
-
-
-TODO.
