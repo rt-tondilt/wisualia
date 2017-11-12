@@ -7,20 +7,45 @@ from wisualia.patterns import Pattern, RGBA,  RED, GREEN, BLUE
 from wisualia.core import derive_repr
 
 class LineJoin(IntEnum):
+    '''
+    Style of the corner between two joined lines.
+    '''
     MITER = 0
     ROUND = 1
     BEVEL = 2
 class LineCap(IntEnum):
+    '''
+    Style of the start and end of a line if it is not joined with another one.
+    '''
     BUTT = 0
     ROUND = 1
     SQUARE = 2
 @derive_repr
 class Dash(object):
+    '''
+    Args:
+        dashes:
+        offset:
+
+    Todo:
+        Experimentad and undocumented.
+    '''
     def __init__(self, dashes:List[float], offset:int=0) -> None:
         self.dashes = dashes
         self.offset = offset
 @derive_repr
 class Stroke(object):
+    '''
+    Args:
+        width:
+        pattern:
+        join:
+        cap:
+        dash:
+
+    The style of drawn lines or paths. All parameters of this class are public
+    and mutable.
+    '''
     def __init__(self,
                  width:float=0.1,
                  pattern:Pattern=RGBA(0,0,0,1),
@@ -54,6 +79,19 @@ def rect(point1:Tuple[float, float],
          point2:Tuple[float, float],
          fill:Optional[Pattern]=GREEN,
          stroke:Optional[Stroke]=None) -> None:
+    '''
+    Args:
+        point1:
+        point2:
+        fill:
+        stroke:
+    Returns:
+        Nothing
+
+    Draw a rectangle to the current image with edges parallel to the x- and
+    y-axis. The edges may not be parallel if the function is called inside a
+    transformation.
+    '''
     cr = core.context
     cr.save()
     cr.rectangle(*point1, point2[0]-point1[0], point2[1]-point1[1])
@@ -66,7 +104,7 @@ def circle(centre:Tuple[float, float]=(0, 0),
            stroke:Optional[Stroke]=None) -> None:
     '''
     Args:
-        centre: the centre point of the circle
+        centre:
         radius:
         fill:
         stroke:
@@ -84,6 +122,16 @@ def circle(centre:Tuple[float, float]=(0, 0),
 def polygon(*points: Tuple[float, float],
             fill:Optional[Pattern]=RED,
             stroke:Optional[Stroke]=None) -> None:
+    '''
+    Args:
+        points:
+        fill:
+        stroke:
+    Returns:
+        Nothing
+
+    Draw a polygon to the current image.
+    '''
     cr = core.context
     cr.save()
 
@@ -96,6 +144,15 @@ def polygon(*points: Tuple[float, float],
     cr.restore()
 
 def paint(pattern:Pattern, alpha:float=1) -> None:
+    '''
+    Args:
+        pattern:
+        alpha:
+    Returns:
+        Nothing
+
+    Paints a pattern to the current image, using given alpha value.
+    '''
     cr = core.context
     cr.save()
     pattern._use_as_source_on(cr)
