@@ -6,15 +6,16 @@ import cairo #type: ignore
 
 context = None #type: Any
 image = None #type: Any
+current_path_is_used=False
 
 class Modifier(metaclass = ABCMeta):
     # DO NOT OVERRIDE, EXPLODES!
     def __enter__(self) -> None:
-        self.__old__matrix = context.get_matrix()
+        context.save()
         self.modify(context)
     # DO NOT OVERRIDE, EXPLODES!
     def __exit__(self, exc_type: None, exc_value: None, traceback: None) -> bool:
-        context.set_matrix(self.__old__matrix)
+        context.restore()
         return False # reraise potential exception
     @abstractmethod
     def modify(self, cr): #type: ignore

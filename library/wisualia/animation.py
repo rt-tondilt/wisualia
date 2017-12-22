@@ -19,6 +19,9 @@ class Camera(object):
 
         INNER, INNER2 = cr.device_to_user_distance(5, 5)
         print(INNER, INNER2)
+
+        cr.new_path()
+
         cr.set_source_rgba(0,0,1,0.4)
         cr.set_line_width(INNER)
         cr.rectangle(x-INNER/2, y-INNER/2, width+INNER, height+INNER)

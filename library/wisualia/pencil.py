@@ -1,4 +1,4 @@
-from typing import Tuple, List, Optional
+'''from typing import Tuple, List, Optional
 from abc import ABCMeta, abstractmethod
 from enum import Enum
 from math import radians
@@ -92,4 +92,4 @@ class Pencil(object):
     def __exit__(self, exc_type: None, exc_value: None, traceback: None) -> bool:
         self.path._refresh()
         _fill_and_stroke(self.fill, self.stroke, self.path.context)
-        return False # reraise potential exception
+        return False # reraise potential exception'''
