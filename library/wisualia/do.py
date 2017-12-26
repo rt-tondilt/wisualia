@@ -1,5 +1,8 @@
 from typing import List, Optional
 from enum import IntEnum
+
+from cairo import FillRule #type:ignore
+
 from wisualia.core import derive_repr
 from wisualia.patterns import Pattern,RGBA
 from wisualia import core
@@ -34,8 +37,9 @@ class Dash(object):
         self.dashes = dashes
         self.offset = offset
 
-def fill(pattern:Pattern) -> None:
+def fill(pattern:Pattern=RGBA(0,0,1,0.4)) -> None:
     cr = core.context
+    cr.set_fill_rule(FillRule.EVEN_ODD)
     pattern._use_as_source_on(cr)
     cr.fill_preserve()
     core.current_path_is_used = True
