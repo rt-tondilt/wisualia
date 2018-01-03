@@ -3,7 +3,7 @@ from enum import IntEnum
 
 from cairo import FillRule #type:ignore
 
-from wisualia.core import derive_repr
+from wisualia.core import derive_repr, Modifier
 from wisualia.patterns import Pattern,RGBA
 from wisualia import core
 
@@ -60,6 +60,11 @@ def stroke(
     cr.stroke_preserve()
     core.current_path_is_used = True
 
+class Clip(Modifier):
+    def modify(self, cr): #type:ignore
+        cr.set_fill_rule(FillRule.EVEN_ODD)
+        cr.clip_preserve()
+        core.current_path_is_used = True
 
 def paint(pattern:Pattern, alpha:float=1) -> None:
     '''
@@ -74,3 +79,8 @@ def paint(pattern:Pattern, alpha:float=1) -> None:
     cr = core.context
     pattern._use_as_source_on(cr)
     cr.paint_with_alpha(alpha)
+
+def mask(pattern:Pattern, mask:Pattern) -> None:
+    cr=core.context
+    pattern._use_as_source_on(cr)
+    mask._use_as_mask_on(cr)

@@ -35,7 +35,11 @@ class Pattern(object):
         cr.identity_matrix()
         cr.set_source(self.cairo_pattern)
         cr.set_matrix(m)
-
+    def _use_as_mask_on(self,cr):
+        m = cr.get_matrix()
+        cr.identity_matrix()
+        cr.mask(self.cairo_pattern)
+        cr.set_matrix(m)
 @derive_repr
 class RGBA(Pattern):
     '''
@@ -61,6 +65,8 @@ class RGBA(Pattern):
         return self.r, self.g, self.b, self.a
     def _use_as_source_on(self, cr): #type: ignore
         cr.set_source(cairo.SolidPattern(*self.get_rgba()))
+    def _use_as_mask_on(self, cr): #type: ignore
+        cr.mask(cairo.SolidPattern(*self.get_rgba()))
 
 def HSVA(h:float, s:float=1, v:float=1, a:float=1) -> RGBA:
     '''
