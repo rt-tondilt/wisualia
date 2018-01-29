@@ -35,7 +35,7 @@ class Pattern(object):
         cr.identity_matrix()
         cr.set_source(self.cairo_pattern)
         cr.set_matrix(m)
-    def _use_as_mask_on(self,cr):
+    def _use_as_mask_on(self,cr): #type: ignore
         m = cr.get_matrix()
         cr.identity_matrix()
         cr.mask(self.cairo_pattern)

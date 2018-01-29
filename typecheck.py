@@ -1,12 +1,14 @@
 
 import sys
 import inspect
-import subprocess
+from subprocess import run, PIPE,STDOUT
 from editor.dir_tools import get_dir
 
 
-result = subprocess.check_output(['mypy', get_dir('library/wisualia'), '--config-file', get_dir('library/wisualia/mypy.ini')],
-                                 universal_newlines=True, shell=True)
+result = run(['mypy', get_dir('library/wisualia'), '--config-file',
+    get_dir('library/wisualia/mypy.ini')],
+    universal_newlines=True, shell=True,stdout=PIPE,stderr=STDOUT).stdout
+
 if result != '':
     print(result)
 

@@ -1,5 +1,5 @@
 import wisualia
-from wisualia.do import fill,stroke, paint, Clip,mask
+from wisualia.do import fill,stroke, paint, Clip,mask, Point
 from wisualia.shapes import circle, polygon
 from wisualia.modifiers import Move, Rotate
 from wisualia.animation import animate
@@ -13,7 +13,11 @@ def loop(t):
     
     circle((0,0),1)
     circle((1,0),1)
-    
+    with Move(2,1):
+        p=Point(1,1)
+    a,b=p
+    print(p[0])
+    print(p)
     with Clip():
         circle((0.5,0),1)
         with Clip():
