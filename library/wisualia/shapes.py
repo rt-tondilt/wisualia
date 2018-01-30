@@ -4,6 +4,7 @@ from math import pi
 
 from wisualia import core
 from wisualia.patterns import Pattern, RGBA,  RED, GREEN, BLUE
+from wisualia.geometry import Point, PointLike
 
 def begin_shape(): #type: ignore
     cr = core.context
@@ -13,14 +14,11 @@ def begin_shape(): #type: ignore
     cr.new_sub_path()
     return cr
 
-def rect(point1:Tuple[float, float],
-         point2:Tuple[float, float]) -> None:
+def rect(point1:PointLike, point2:PointLike) -> None:
     '''
     Args:
         point1:
         point2:
-        fill:
-        stroke:
     Returns:
         Nothing
 
@@ -31,14 +29,12 @@ def rect(point1:Tuple[float, float],
     cr = begin_shape()
     cr.rectangle(*point1, point2[0]-point1[0], point2[1]-point1[1])
 
-def circle(centre:Tuple[float, float]=(0, 0),
+def circle(centre:PointLike=(0, 0),
            radius:float=1) -> None:
     '''
     Args:
         centre:
         radius:
-        fill:
-        stroke:
     Returns:
         Nothing
 
@@ -47,12 +43,10 @@ def circle(centre:Tuple[float, float]=(0, 0),
     cr = begin_shape()
     cr.arc(centre[0], centre[1], radius , 0, 2 * pi)
 
-def polygon(*points: Tuple[float, float]) -> None:
+def polygon(*points: PointLike) -> None:
     '''
     Args:
         points:
-        fill:
-        stroke:
     Returns:
         Nothing
 

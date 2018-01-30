@@ -1,10 +1,11 @@
 import wisualia
-from wisualia.do import fill,stroke, paint, Clip,mask, Point
-from wisualia.shapes import circle, polygon
+from wisualia.do import fill,stroke, paint, Clip,mask
+from wisualia.shapes import circle, polygon, rect
 from wisualia.modifiers import Move, Rotate
 from wisualia.animation import animate
 from wisualia.patterns import RGBA, LinearGradient,ImagePattern
 from wisualia.image import Image
+from wisualia.geometry import Point
 
 image=Image.from_png('example.png')
 
@@ -16,10 +17,11 @@ def loop(t):
     with Move(2,1):
         p=Point(1,1)
     a,b=p
+    rect(p,p)
     print(p[0])
     print(p)
     with Clip():
-        circle((0.5,0),1)
+        circle((0.5,0),t)
         with Clip():
         
         #fill()
@@ -34,4 +36,4 @@ def loop(t):
     
     
     mask(ip,g)
-animate(loop, duration=20)
+animate(loop, duration=3)

@@ -9,6 +9,7 @@ import colorsys
 import cairo #type: ignore
 from wisualia import core
 from wisualia.image import Image
+from wisualia.geometry import PointLike
 from wisualia.core import derive_repr
 
 
@@ -106,8 +107,8 @@ def HSVA(h:float, s:float=1, v:float=1, a:float=1) -> RGBA:
     elif a<0: a=0
     return RGBA(*colorsys.hsv_to_rgb(h,s,v), a)
 
-def LinearGradient(start:Tuple[float,float],
-                   end:Tuple[float,float],
+def LinearGradient(start:PointLike,
+                   end:PointLike,
                    color_stops:Sequence[Tuple[float, RGBA]]) -> Pattern:
     '''
     Args:
@@ -123,9 +124,9 @@ def LinearGradient(start:Tuple[float,float],
         gradient.add_color_stop_rgba(offset, *color.get_rgba())
     return Pattern(gradient)
 
-def RadialGradient(start_centre:Tuple[float,float],
+def RadialGradient(start_centre:PointLike,
                    start_radius:float,
-                   end_centre:Tuple[float,float],
+                   end_centre:PointLike,
                    end_radius:float,
                    color_stops:Sequence[Tuple[float, RGBA]]) -> Pattern:
     gradient = cairo.RadialGradient(*start_centre, start_radius,

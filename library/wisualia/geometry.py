@@ -1,5 +1,20 @@
 from typing import Iterable, Iterator, Union, Tuple
+from typing_extensions import Protocol
+
 from wisualia import core
+
+class PointLike(Protocol):
+    '''Any object that can be used as a point.
+
+    There are currently 2 PointLike objects ``Tuple[float, float]`` and
+    ``Point``.
+    '''
+
+    def __iter__(self) -> Iterator[float]:
+        ...
+    def __getitem__(self, key:int) -> float:
+        ...
+
 class Point(Iterable[float]):
     '''Point object'''
     def __init__(self,x:float,y:float) -> None:
@@ -19,6 +34,3 @@ class Point(Iterable[float]):
         return self[1]
     def __repr__(self) -> str:
         return 'Point({}, {})'.format(self[0], self[1])
-
-PointLike = Union[Tuple[float,float], Point]
-'''Pointlike is either Point or tuple of floats'''
