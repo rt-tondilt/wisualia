@@ -4,5 +4,5 @@ Tutorial
 .. toctree::
 
   getting_started
-  transformations
+  pat_and_trans
   images

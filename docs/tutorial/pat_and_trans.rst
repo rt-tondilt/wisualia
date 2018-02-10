@@ -168,25 +168,28 @@ first and outer after them. Compare the following shapes.
 .. testcode:: multiple_transformations
 
   import wisualia
+  from wisualia.do import stroke, fill
   from wisualia.animation import animate
-  from wisualia.shapes import circle, rect, Stroke
+  from wisualia.shapes import circle, rect
   from wisualia.patterns import RGBA
   from wisualia.modifiers import Rotate, Scale
 
-  invisible = RGBA(0,0,0,0)
   def loop(t):
-      rect((0,-1),(2,0), fill=invisible, stroke=Stroke())
-      circle((2,0), 0.3, fill=RGBA(0.5,0.5,0.5))
+      # Red, not transformed.
+      rect((0,0), (1.5, 1.5))
+      fill(RGBA(1,0,0,0.5))
 
+      # Green, rotated and then scaled.
       with Scale((0.5,1)):
-          with Rotate(45):
-              rect((0,-1),(2,0), fill=invisible, stroke=Stroke())
-              circle((2,0), 0.3, fill=RGBA(1,0,0))
+          with Rotate(-45):
+              rect((0,0), (1.5, 1.5))
+              fill(RGBA(0,1,0,0.5))
 
-      with Rotate(45):
+      # Blue, scaled and then rotated.
+      with Rotate(-45):
           with Scale((0.5,1)):
-              rect((0,-1),(2,0), fill=invisible, stroke=Stroke())
-              circle((2,0), 0.3, fill=RGBA(0,0,1))
+              rect((0,0), (1.5, 1.5))
+              fill(RGBA(0,0,1,0.5))
 
   animate(loop)
 
