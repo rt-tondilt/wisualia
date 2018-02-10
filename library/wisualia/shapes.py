@@ -7,6 +7,7 @@ from wisualia.patterns import Pattern, RGBA,  RED, GREEN, BLUE
 from wisualia.geometry import Point, PointLike
 
 def begin_shape(): #type: ignore
+    '''TODO: Maybe should be _private.'''
     cr = core.context
     if core.current_path_is_used:
         cr.new_path()
@@ -59,10 +60,20 @@ def polygon(*points: PointLike) -> None:
     cr.close_path()
 
 def text(start:PointLike, text:str, size:float) -> None:
-        cr = begin_shape()
-        cr.save()
-        cr.translate(*start)
-        cr.scale(1,-1)
-        cr.set_font_size(size)
-        cr.text_path(text)
-        cr.restore()
+    '''
+    Args:
+        start:
+        text:
+        size:
+    Returns:
+        Nothing
+
+    Draw text to the current image.
+    '''
+    cr = begin_shape()
+    cr.save()
+    cr.translate(*start)
+    cr.scale(1,-1)
+    cr.set_font_size(size)
+    cr.text_path(text)
+    cr.restore()
