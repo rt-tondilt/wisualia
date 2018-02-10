@@ -40,4 +40,4 @@ def loop(t):
     cairo_loop(t,cr)
 
 
-animation.animate(loop)
+animation.animate(loop,animation.Camera((30,30),40))

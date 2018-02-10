@@ -1,3 +1,4 @@
+#TODO: FIX OR DELETE
 import wisualia
 from wisualia.shapes import circle, Stroke
 from wisualia.modifiers import Move, Scale, Rotate
@@ -9,7 +10,7 @@ from wisualia.animation import animate
 # We open a png image outside of loop() to keep programm fast.
 
 imag = Image.from_png('example.png')
-def loop(t): 
+def loop(t):
     if t<1:
         print(1)
         print('Pencil lets us draw arbitrary shapes.')
@@ -20,7 +21,7 @@ def loop(t):
             p.line_to( 1,-1)
             p.arc(centre=(0,-1), radius=1, angles=(0,180))
             print('Start and end angles are given, using convention from mathematics.')
-        
+
     if 1<=t<2:
         print(2)
         print('We can use modifiers on parts of our drawing')
@@ -80,15 +81,15 @@ def loop(t):
     if 7<=t<8:
         print(8)
         print('All new patterns can be images.')
-        
+
         pat = ImagePattern(imag, pixels_per_unit=40)
-        
+
         with Pencil(fill=RGBA(0,0,1,0.5), stroke=Stroke(width=0.5, pattern=pat)) as p:
             with Scale(factors=(2, 1), centre=(0,0)):
                 p.arc((0,0),1,(0,360))
         print('Notice how the edge of fill pattern is actually in the centre of stroke line.')
 
-                    
+
     if 8<=t:
         print('9')
         print('Demo.')
@@ -112,7 +113,7 @@ def loop(t):
                 pass
         ```
         ''')
-                
-                        
-            
+
+
+
 animate(loop)

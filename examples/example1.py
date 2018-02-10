@@ -6,6 +6,7 @@ from wisualia.animation import animate
 from wisualia.patterns import RGBA, LinearGradient,ImagePattern
 from wisualia.image import Image
 from wisualia.geometry import Point
+from wisualia.pencil import Pencil
 
 image=Image.from_png('example.png')
 
@@ -36,4 +37,9 @@ def loop(t):
     
     
     mask(ip,g)
+    p=Pencil()
+    p.line(1,1)
+    p.line(2,1)
+    p.draw()
+    stroke()
 animate(loop, duration=3)

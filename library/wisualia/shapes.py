@@ -57,3 +57,12 @@ def polygon(*points: PointLike) -> None:
     for i in range(1, len(points)):
         cr.line_to(*points[i])
     cr.close_path()
+
+def text(start:PointLike, text:str, size:float) -> None:
+        cr = begin_shape()
+        cr.save()
+        cr.translate(*start)
+        cr.scale(1,-1)
+        cr.set_font_size(size)
+        cr.text_path(text)
+        cr.restore()

@@ -1,6 +1,8 @@
 from typing import Iterable, Iterator, Union, Tuple
 from typing_extensions import Protocol
 
+from math import sqrt
+
 from wisualia import core
 
 class PointLike(Protocol):
@@ -34,3 +36,5 @@ class Point(Iterable[float]):
         return self[1]
     def __repr__(self) -> str:
         return 'Point({}, {})'.format(self[0], self[1])
+    def distance(self, other:PointLike) -> float:
+        return sqrt((self[0]-other[0])**2 + (self[1]-other[1])**2)

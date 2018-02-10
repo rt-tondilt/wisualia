@@ -1,10 +1,11 @@
-from typing import List, Optional
+from typing import List, Optional, Tuple
 from enum import IntEnum
 
 from cairo import FillRule #type:ignore
 
 from wisualia.core import derive_repr, Modifier
 from wisualia.patterns import Pattern,RGBA
+from wisualia.geometry import Point
 from wisualia import core
 
 class LineJoin(IntEnum):
@@ -84,3 +85,19 @@ def mask(pattern:Pattern, mask:Pattern) -> None:
     cr=core.context
     pattern._use_as_source_on(cr)
     mask._use_as_mask_on(cr)
+
+def in_fill(x:float, y:float) -> bool:
+    cr = core.context
+    return cr.in_fill(x,y) #type: ignore
+def in_clip(x:float, y:float) -> bool:
+    cr = core.context
+    return cr.in_clip(x,y) #type: ignore
+
+def fill_extents() -> Tuple[Tuple[float,float], Tuple[float,float]]:
+    cr = core.context
+    x1,y1,x2,y2 = cr.fill_extents()
+    return (x1,y1), (x2,y2)
+def clip_extents() -> Tuple[Tuple[float,float], Tuple[float,float]]:
+    cr = core.context
+    x1,y1,x2,y2 = cr.clip_extents()
+    return (x1,y1), (x2,y2)
