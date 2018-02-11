@@ -7,7 +7,7 @@ def main() -> None:
     # depend on users current directory.
     import os
     import __main__
-    os.chdir(os.path.dirname(__main__.__file__))
+    os.chdir(os.path.dirname(os.path.abspath(__main__.__file__)))
 
     import gi #type: ignore
     gi.require_version('Gtk', '3.0')
