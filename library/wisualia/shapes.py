@@ -15,6 +15,20 @@ def begin_shape(): #type: ignore
     cr.new_sub_path()
     return cr
 
+def line(point1:PointLike, point2:PointLike) -> None:
+    '''
+    Args:
+        point1:
+        point2:
+    Returns:
+        Nothing
+
+    Draw a straight line between points.
+    '''
+    cr = begin_shape()
+    cr.move_to(*point1)
+    cr.line_to(*point2)
+
 def rect(point1:PointLike, point2:PointLike) -> None:
     '''
     Args:
