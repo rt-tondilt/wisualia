@@ -1,5 +1,6 @@
 import wisualia
-from wisualia.shapes import circle, paint, rect, Stroke, Dash
+from wisualia.do import paint, stroke, Dash
+from wisualia.shapes import circle, rect
 from wisualia.modifiers import Scale, Rotate
 from wisualia.patterns import RGBA, ImagePattern, LinearGradient, RadialGradient
 from wisualia.pencil import Pencil
@@ -14,7 +15,8 @@ def loop(t):
         f2=RadialGradient((0,0),1, (5,5), 10, stops)
     paint(f2, alpha=0.2)
     with Scale((t,t)):
-        circle((0,0),1, stroke=Stroke(width=0.5))
+        circle((0,0),1)
+        stroke(width=0.5)
         paint(ImagePattern(im, pixels_per_unit=40), alpha=0.7)
         with Pencil(fill=f2, stroke=Stroke(width=0.5, dash=Dash([0.2,0.2],4))) as p:
             p.move_to(0,3)

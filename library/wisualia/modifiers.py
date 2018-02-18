@@ -1,5 +1,6 @@
 from typing import Tuple
 from wisualia.core import Modifier, derive_repr
+from  wisualia.geometry import PointLike
 from math import radians
 
 @derive_repr
@@ -12,7 +13,7 @@ class Move(Modifier):
 
 @derive_repr
 class Rotate(Modifier):
-    def __init__(self, degrees:float, centre:Tuple[float, float]=(0, 0)) -> None:
+    def __init__(self, degrees:float, centre:PointLike=(0, 0)) -> None:
         self.degrees = degrees
         self.centre = centre
     def modify(self, cr): #type: ignore
@@ -22,7 +23,7 @@ class Rotate(Modifier):
 
 @derive_repr
 class Scale(Modifier):
-    def __init__(self, factors:Tuple[float, float], centre:Tuple[float, float]=(0, 0)) -> None:
+    def __init__(self, factors:Tuple[float, float], centre:PointLike=(0, 0)) -> None:
         self.factors = factors
         self.centre = centre
     def modify(self, cr): #type: ignore

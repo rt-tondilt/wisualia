@@ -12,7 +12,7 @@ follow these rules:
   library by it's name so ``from wisualia import *`` and ``import wisualia as othername``
   do not work.
 * The file must call :py:func:`wisualia.animation.animate`.The first argument of
-  this function is another function usually called a loop function.
+  this function is the loop function.
 * The loop function will be called each time a new frame needs to be drawn.
   The only argument of the loop function is the current time from the start of
   the animation in seconds.
@@ -37,9 +37,11 @@ something to draw.
   import wisualia
   from wisualia.animation import animate
   from wisualia.shapes import circle
+  from wisualia.do import fill
 
   def loop(time):
       circle()
+      fill()
 
   animate(loop)
 
@@ -50,26 +52,22 @@ something to draw.
 
 .. image:: /_images/first_circle.png
 
-Lets look at the documentation of :py:func:`wisualia.shapes.circle`. The function
-takes four arguments.
-
-* The first argument is the centre point of the circle, represented as a pair of
-  floats.
-* The radius of the circle.
-* The pattern that is used to fill the circle.
-* The stroke that is used to draw the curve of the circle.
-
-Knowing that we can already do some animation.
+In this code ``circle()`` defines the shape we want to draw and ``fill()`` says
+that we want to fill the shape with a color. The position and color of the
+circle shown above depend on the default arguments of ``circle()`` and
+``fill()``. Of course we can choose our own values.
 
 .. testcode:: second_circle
 
   import wisualia
   from wisualia.animation import animate
   from wisualia.shapes import circle
+  from wisualia.do import fill
+  from wisualia.patterns import RGBA
 
   def loop(time):
-      circle((2, time/5), time/10)
-      circle((-1, time/5), time/10)
+      circle((1, 0), 1+time/2) # centre point and radius
+      fill(RGBA(1, 1, 0, 1))
 
   animate(loop)
 
@@ -78,160 +76,182 @@ Knowing that we can already do some animation.
   loop(1)
   wisualia_x.core.image.write_to_png('_images/second_circle.png')
 
-Resulting animation at 1 second.
-
 .. image:: /_images/second_circle.png
 
-.. warning::
+Resulting animation of "growing" circle at 1 second.
 
-  All Wisualia functions that accept floats as arguments also work with integers.
-  However, infinite and other unusual float values have not been tested and
-  might result in **any** behaviour.
+We can use ``stroke()`` function to draw the edges of the shape.
 
-Fill and Stroke
----------------
-
-The third argument of circle is a Pattern named fill. A pattern is a virtual
-"paint" that is used to draw things. Patterns live in
-:py:mod:`wisualia.patterns` module. Here is an example of usage of RGBA pattern.
-
-.. testcode:: first_fill
+.. testcode:: stroke_1
 
   import wisualia
   from wisualia.animation import animate
-  from wisualia.shapes import circle
+  from wisualia.shapes import polygon
+  from wisualia.do import fill, stroke
   from wisualia.patterns import RGBA
 
   def loop(time):
-      circle((0,0), 1, fill=RGBA(0, 0, 1, 1))
-      circle((0,0), 0.2, fill=RGBA(0, 0, 0))
-      circle((1,0), 0.5, fill=RGBA(1, 0, 0, 0.5))
+      polygon((-2,-1), (-1,-1), (1,1), (-1,1))
+      fill(RGBA(0,0,0)) # Note that you can ommit the alpha value.
+      stroke(0.4, RGBA(1,0,0,0.5)) # Line width and color
 
   animate(loop)
 
-.. testcleanup:: first_fill
+.. testcleanup:: stroke_1
 
   loop(1)
-  wisualia_x.core.image.write_to_png('_images/first_fill.png')
+  wisualia_x.core.image.write_to_png('_images/stroke_1.png')
 
-.. image:: /_images/first_fill.png
+.. image:: /_images/stroke_1.png
 
-Note that all color values are in range from 0 to 1. The default alpha value is
-1 meaning completely opaque.
+Here the stroke is 50% transparent and we can see the edge of underlying filled
+area. Try switching the order of ``fill()`` and ``stoke()`` operations and
+compare the result.
 
-The last argument specifies the properties of the curve of the circle. It is an
-optional argument meaning that it can be either :py:obj:`None` or
-:py:obj:`wisualia.shapes.Stroke`. If the value is :py:obj:`None`, then no stroke
-is drawn. As we saw before, this argument defaults to :py:obj:`None`.
+Holes and intersecting shapes.
+------------------------------
 
-.. testcode:: first_stroke
+We can make holes by defining two shapes and filling them together.
+
+.. testcode:: hole_1
 
   import wisualia
   from wisualia.animation import animate
-  from wisualia.shapes import circle, Stroke
+  from wisualia.shapes import circle, polygon
+  from wisualia.do import fill
   from wisualia.patterns import RGBA
 
   def loop(time):
-      blueish = RGBA(0, 0, 1, 0.5)
-      redish = RGBA(1, 0, 0, 0.5)
-
-      circle((-2,0), 0.5, fill=blueish)
-      circle((-1,0), 0.5, fill=blueish, stroke=None)
-      circle(( 0,0), 0.5, fill=blueish, stroke=Stroke())
-      circle(( 1,0), 0.5,
-             fill=blueish,
-             stroke=Stroke(width=0.2, pattern=redish))
-      circle(( 1,0), 0.5,
-             fill=blueish,
-             stroke=Stroke(width=0.2, pattern=redish))
-      circle(( 2,0), 2,
-             fill=RGBA(0,0,0,0),
-             stroke=Stroke(width=0.2, pattern=redish))
+      polygon((-1,1),(-1,-1),(2,0))
+      circle((0,0),0.5)
+      fill(RGBA(1,0,0))
 
   animate(loop)
 
-.. testcleanup:: first_stroke
+.. testcleanup:: hole_1
 
   loop(1)
-  wisualia_x.core.image.write_to_png('_images/first_stroke.png')
+  wisualia_x.core.image.write_to_png('_images/hole_1.png')
 
-.. image:: /_images/first_stroke.png
+.. image:: /_images/hole_1.png
+
+This is different from defining two shapes and filling them separately.
+
+.. testcode:: hole_2
+
+  import wisualia
+  from wisualia.animation import animate
+  from wisualia.shapes import circle, polygon
+  from wisualia.do import fill
+  from wisualia.patterns import RGBA
+
+  def loop(time):
+      polygon((-1,1),(-1,-1),(2,0))
+      fill(RGBA(1,0,0))
+
+      circle((0,0),0.5)
+      fill(RGBA(0.2,0,0))
+
+  animate(loop)
+
+.. testcleanup:: hole_2
+
+  loop(1)
+  wisualia_x.core.image.write_to_png('_images/hole_2.png')
+
+.. image:: /_images/hole_2.png
+
+We can also define two intersecting shapes and fill them together.
+
+.. testcode:: hole_3
+
+  import wisualia
+  from wisualia.animation import animate
+  from wisualia.shapes import circle, polygon
+  from wisualia.do import fill
+  from wisualia.patterns import RGBA
+
+  def loop(time):
+      polygon((-1,1),(-1,-1),(2,0))
+      circle((0,0),1)
+      fill(RGBA(0.2,0,0))
+
+  animate(loop)
+
+.. testcleanup:: hole_3
+
+  loop(1)
+  wisualia_x.core.image.write_to_png('_images/hole_3.png')
+
+.. image:: /_images/hole_3.png
 
 .. note::
 
-  In Wisualia functions that draw something (mainly in
-  :py:mod:`wisualia.shapes`) there is a convention for the order of
-  arguments. Allthough all arguments can be reffered by a keyword and in any
-  order, the following order is highly recommended:
+  Filling is currently done with ``cairo.FillRule.EVEN_ODD``. TODO: Explain
+  more.
 
-  1. Arguments defining the geometry of the shape. These are usually used as
-     positional arguments.
-  2. The fill of the shape, usually used as a keyword argument.
-  3. The stroke of the shape, usually used as a keyword argument.
+Automatical clearing of already used shapes
+-------------------------------------------
 
-  Fill and stroke are usually optional (in other words they can be :py:obj:`None`), but
-  the default fill value is something visible for quick prototyping. Geometry
-  related arguments may have default values as well, they default to shapes
-  inside ``-1 <= x <= 1`` and ``-1 <= y <=1``.
+The ``fill()`` and ``stroke()`` operations apply to the previously defined
+shapes. You can define any number of shapes and then fill and stroke them
+together. You can also also fill or stroke the previously defined shapes
+multiple times.
 
-Loading images
-----------------
+However after you have defined the shapes and filled or stroked them any number
+of times, the shapes are automatically cleared.
 
-Lets draw the following image :download:`example.png`. Here is a minimal
-solution.
-
-.. testcode:: first_image
+.. testcode:: clearing
 
   import wisualia
   from wisualia.animation import animate
-  from wisualia.image import Image
-  from wisualia.patterns import ImagePattern
-  from wisualia.shapes import paint
-
-  # We load the file outside of the loop function, to make looping faster.
-  # Here the image is inside tutorial folder for technical reasons.
-  # Normally you would open image in the same folder, like
-  # image = Image.from_png('example.png')
-  image = Image.from_png('tutorial/example.png')
-
-  def loop(t):
-      paint(ImagePattern(image, pixels_per_unit=80))
-
-  animate(loop)
-
-.. testcleanup:: first_image
-
-  loop(1)
-  wisualia_x.core.image.write_to_png('_images/first_image.png')
-
-.. image:: /_images/first_image.png
-
-ImagePatter is a pattern, which means that we can use shapes to crop images.
-
-.. testcode:: second_image
-
-  import wisualia
-  from wisualia.animation import animate
-  from wisualia.image import Image
-  from wisualia.patterns import ImagePattern
   from wisualia.shapes import circle
+  from wisualia.do import fill, stroke
+  from wisualia.patterns import RGBA
 
-  image = Image.from_png('tutorial/example.png')
+  def loop(time):
+      circle((-1,0), 0.5)
+      stroke(0.3, RGBA(1,0,0))
+      stroke(0.1, RGBA(0,0,1))
 
-  def loop(t):
-      circle(fill=ImagePattern(image, pixels_per_unit=80))
+      # Here after the first circle has been defined and used
+      # and before the second circle is defined, the first
+      # circle is automatically cleared.
+
+      circle((1,0), 0.5)
+      fill(RGBA(0,0.5,0)) # Here only the second circle is filled.
 
   animate(loop)
 
-.. testcleanup:: second_image
+.. testcleanup:: clearing
 
   loop(1)
-  wisualia_x.core.image.write_to_png('_images/second_image.png')
+  wisualia_x.core.image.write_to_png('_images/clearing.png')
 
-.. image:: /_images/second_image.png
+.. image:: /_images/clearing.png
 
-This looks still quite ugly, the image is inside the first quadrant of the
-plane. We will fix that in the transformations tutorial.
+.. note::
+
+  The automatical clearing actually happens inside the following shape. The
+  simplified implementation is shown below.
+
+  ::
+
+    clearing_is_needed = False
+    def fill(...):
+        global clearing_is_needed
+        clearing_is_needed = True
+        ...
+    def stroke(...):
+        global clearing_is_needed
+        clearing_is_needed = True
+        ...
+    def circle(...): # or any other shape
+        global clearing_is_needed
+        if clearing_is_needed:
+            clear() # <--- actual clearing operation
+            clearing_is_needed = False
+        ...
 
 
 Exporting animations
@@ -248,6 +268,12 @@ Exporting animations
 
 Possible mistakes and other suprising behaviour
 -----------------------------------------------
+
+.. warning::
+
+  All Wisualia functions that accept floats as arguments also work with integers.
+  However, infinite and other unusual float values have not been tested and
+  might result in **any** behaviour.
 
 **Don't change global variables from the loop function.** For example the following
 code behaves in a quite nonsensical way (try zooming in and out, moving the view

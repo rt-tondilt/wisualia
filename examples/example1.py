@@ -1,19 +1,45 @@
 import wisualia
-from wisualia.shapes import circle, polygon,Stroke
+from wisualia.do import fill,stroke, paint, Clip,mask
+from wisualia.shapes import circle, polygon, rect
 from wisualia.modifiers import Move, Rotate
 from wisualia.animation import animate
+from wisualia.patterns import RGBA, LinearGradient,ImagePattern
+from wisualia.image import Image
+from wisualia.geometry import Point
+from wisualia.pencil import Pencil
+
+image=Image.from_png('example.png')
 
 def loop(t):
-    with Move(0,t):
-        circle((1,1),1)
-        
-        circle((2,0),t,fill=None, stroke=Stroke(width=0.5))
-        polygon((0,0),(5,5),(6-t,-t/10))
-        a= ''
-    with Rotate(t*90):
-        circle((5,5),1)
-    print('HEA LEIB', t)
-    print('KONN')
+    #paint(RGBA(0,0,0))
     
+    circle((0,0),1)
+    circle((1,0),1)
+    with Move(2,1):
+        p=Point(1,1)
+    a,b=p
+    rect(p,p)
+    print(p[0])
+    print(p)
+    with Clip():
+        circle((0.5,0),t)
+        with Clip():
+        
+        #fill()
+            paint(RGBA(1,0,0))
 
-animate(loop, duration=20)
+        #fill()
+    #circle((0,1),1)
+    #stroke()
+    #with Move(2,0):
+    ip=ImagePattern(image,40)
+    g=LinearGradient((0,0),(3,3),[(0,RGBA(1,0,0,0)),(1,RGBA(1,0,0))])
+    
+    
+    mask(ip,g)
+    p=Pencil()
+    p.line(1,1)
+    p.line(2,1)
+    p.draw()
+    stroke()
+animate(loop, duration=3)

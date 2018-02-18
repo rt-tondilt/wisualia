@@ -19,12 +19,15 @@ class Camera(object):
 
         INNER, INNER2 = cr.device_to_user_distance(5, 5)
         print(INNER, INNER2)
-        cr.set_source_rgba(0,0,1,0.4)
+
+        cr.new_path()
+
+        cr.set_source_rgba(0.2,0.2,0.2,0.4)
         cr.set_line_width(INNER)
         cr.rectangle(x-INNER/2, y-INNER/2, width+INNER, height+INNER)
         cr.stroke()
         OUTER, OUTER2 = cr.device_to_user_distance(20, 20)
-        cr.set_source_rgba(0,0,1,0.2)
+        cr.set_source_rgba(0.2,0.2,0.2,0.2)
         cr.set_line_width(OUTER)
         cr.rectangle(x-OUTER/2, y-OUTER/2, width+OUTER, height+OUTER)
         cr.stroke()

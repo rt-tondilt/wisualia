@@ -1,19 +1,25 @@
 from typing import Tuple, List, Optional
 from abc import ABCMeta, abstractmethod
 from enum import Enum
-from math import radians
+from math import radians, sin, cos, atan2
 
 import cairo #type: ignore
 
 from wisualia import core
 from wisualia.patterns import Pattern, RED, GREEN, BLUE
-from wisualia.shapes import Stroke, _fill_and_stroke
+from wisualia.shapes import begin_shape
+from wisualia.geometry import Point, PointLike
 
-
-class Path(object):
+class Pencil(object):
+    '''
+    Object that records primitive drawing operations and can draw
+    the resulting shapes.
+    '''
     def __init__(self) -> None:
         self.context = cairo.Context(core.context.get_target())
-        self.image = core.image
+        self.image = core.image # for sanity checks
+        self._refresh()
+        self.context.move_to(0,0)
     def _refresh(self) -> None:
         if self.image != core.image:
             message = (
@@ -22,74 +28,93 @@ class Path(object):
             ).format(self.image, core.image)
             raise Exception(message)
         self.context.set_matrix(core.context.get_matrix())
-    def move_to(self, x:float, y:float) -> None:
+    def move(self, x:float, y:float) -> None:
+        '''
+        Args:
+            x:
+            y:
+        Returns:
+            Nothing
+
+        Move pencil to specified point.
+        '''
         self._refresh()
         self.context.move_to(x, y)
-    def line_to(self, x:float, y:float) -> None:
+    def line(self, x:float, y:float) -> None:
+        '''
+        Args:
+            x:
+            y:
+        Returns:
+            Nothing
+
+        Record a line from current point to specified point.
+        '''
         self._refresh()
-        self.context.line_to(x,y)
-    def close_path(self) -> None:
+        self.context.line_to(x, y)
+    def arc(self, centre:PointLike, rel_angle:float) -> None:
+        '''
+        Args:
+            centre:
+            rel_angle:
+        Returns:
+            Nothing
+
+        Record an arc starting from the current point with given centre point and angle.
+        '''
         self._refresh()
-        self.context.close_path()
-    def arc(self,
-            centre:Tuple[float, float],
-            radius:float,
-            angles:Tuple[float, float]) -> None:
-        self._refresh()
-        self.context.arc(*centre, radius, radians(angles[0]), radians(angles[1]))
-    def curve_to(self,
-                 control1:Tuple[float,float],
-                 control2:Tuple[float,float],
-                 end:Tuple[float,float]) -> None:
+        rel_angle = radians(rel_angle)
+        start = self.context.get_current_point()
+        start_angle = atan2(start[1]-centre[1], start[0]-centre[0])
+        end_angle = start_angle + rel_angle
+        radius = Point(*start).distance(centre)
+        if rel_angle >= 0:
+            self.context.arc(*centre, radius, start_angle, end_angle)
+        else:
+            self.context.arc_negative(*centre, radius, start_angle, end_angle)
+    def curve(self,
+                 control1:PointLike,
+                 control2:PointLike,
+                 end:PointLike) -> None:
+        '''
+        Args:
+            control1:
+            control2:
+            end:
+        Returns:
+            Nothing
+
+        Record a cubic bezier spline starting from current point.
+        '''
         self._refresh()
         self.context.curve_to(*control1, *control2, *end)
-    def text(self, text:str, size:float) -> None:
-        self._refresh()
-        self.context.save()
-        self.context.scale(1,-1)
-        self.context.set_font_size(size)
-        self.context.text_path(text)
-        self.context.restore()
+    def close_path(self) -> None:
+        '''
+        Returns:
+            Nothing
 
-    def draw_fill(self, pattern:Pattern) -> None:
+        Closes the path with a straight line. This is different from ``pencil.line(start_x, start_y)`` because the corner will be joined.
+        '''
         self._refresh()
-        pattern._use_as_source_on(self.context)
-        self.context.fill_preserve()
-    def draw_stroke(self, stroke:Stroke) -> None:
-        self._refresh()
-        stroke.pattern._use_as_source_on(self.context)
-        stroke._use_shape(self.context)
-        self.context.stroke_preserve()
+        self.context.close_path()
 
-    def in_fill(self, x:float, y:float) -> bool:
+
+    def draw(self) -> None:
+        '''
+        Returns:
+            Nothing
+
+        Do the actual drawing.
+        '''
         self._refresh()
-        return self.context.in_fill(x,y) #type: ignore
-    def in_stroke(self, x:float, y:float, stroke:Stroke) -> bool:
+        cr = begin_shape()
+        cr.append_path(self.context.copy_path())
+    def copy(self) -> 'Pencil':
+        '''
+        Returns:
+            Deep copy of self.
+        '''
         self._refresh()
-        stroke._use_shape(self.context)
-        return self.context.in_stroke(x,y) #type: ignore
-    def fill_extents(self) -> Tuple[float,float,float,float]:
-        self._refresh()
-        return self.context.fill_extents() #type: ignore
-    def stroke_extents(self, stroke:Stroke) -> Tuple[float,float,float,float]:
-        self._refresh()
-        stroke._use_shape(self.context)
-        return self.context.stroke_extents() #type: ignore
-    def copy(self) -> 'Path':
-        self._refresh()
-        p = Path()
+        p = Pencil()
         p.context.append_path(self.context.copy_path())
         return p
-
-
-class Pencil(object):
-    def __init__(self,  fill:Optional[Pattern]=RED, stroke:Optional[Stroke]=Stroke()) -> None:
-        self.stroke = stroke
-        self.fill = fill
-        self.path = Path()
-    def __enter__(self) -> Path:
-        return self.path
-    def __exit__(self, exc_type: None, exc_value: None, traceback: None) -> bool:
-        self.path._refresh()
-        _fill_and_stroke(self.fill, self.stroke, self.path.context)
-        return False # reraise potential exception

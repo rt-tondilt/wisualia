@@ -1,4 +1,5 @@
 import wisualia
+from wisualia.do import fill
 from wisualia.shapes import circle
 from wisualia.modifiers import Move, Rotate
 from wisualia.patterns import ImagePattern, RGBA
@@ -20,12 +21,16 @@ def loop(t):
     white = im
     for i in range(n):
         with Rotate(i/n*m*180):
-            circle((0, 4),4, white)
-            circle((0, -4),4, black)
+            circle((0, 4),4)
+            fill(white)
+            circle((0, -4),4)
+            fill(black)
 
     for i in range(9,int(round(t))):
-        circle((0,4),1, white)
-        circle((0,-4),1, black)
+        circle((0,4),1)
+        fill(white)
+        circle((0,-4),1)
+        fill(black)
 
 
 animate(loop, camera=Camera((20,20), 40))
