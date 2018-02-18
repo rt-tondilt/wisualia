@@ -136,40 +136,6 @@ def worker_fn(con):
         else: assert False
 
 
-class Workers(object):
-    def __init__(self):
-        self.worker1 = Worker()
-    def send_program(self, code, file_name):
-        if self.worker1.ready:
-            self.worker1.con.send(CompileRequest(code, file_name))
-            self.worker1.ready = False
-    def send_request(self, r):
-        if self.worker1.ready:
-            self.worker1.con.send(r)
-            self.worker1.ready = False
-
-
-    def stop(self):
-        self.worker1 = Worker()
-        self.worker2 = Worker()
-    def iter(self):
-        if self.worker2.con.poll():
-            result = self.worker2.con.recv()
-            if isinstance(result, InitSuccess):
-                self.worker1 = worker2
-                self.worker2 = Worker()
-            else:
-                self.worker2.ready = True
-        if self.worker1.con.poll():
-            result = self.worker1.con.recv()
-            if isinstance(result, Success):
-                #display
-                self.worker1.ready = True
-            else:
-                #error
-                self.stop()
-
-
 class Worker(object):
     def __init__(self) -> None:
         parent, child = Pipe()
