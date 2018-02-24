@@ -3,12 +3,13 @@
 import subprocess
 import os
 from time import perf_counter as get_time
+from typing import Union
 
 import mypy.api
 from gi.repository import GLib, Gtk
 import state
 import audio
-from gui import input_buffer, output_buffer, set_status_bar_text, drawing_area, scale
+from gui import input_buffer, set_output, set_status_bar_text, drawing_area, scale
 from worker import Worker, InitSuccess, Success, Failure, CompileRequest, DrawRequest
 from dir_tools import get_dir
 
@@ -43,8 +44,12 @@ class Loop(object):
 # This exception is raised inside subgenerators of main_task() to
 # kill the engine.
 class FailureException(Exception):
-    def __init__(self, error: str) -> None:
-        self.error = error
+    def __init__(self, error: Union[str,Failure]) -> None:
+        if isinstance(error, Failure):
+            self.failure = error
+        elif isinstance(error, str):
+            self.failure = Failure('', error)
+        else: assert False
 
 # Usage:
 # yield from yield_from_while(generator, lamda: x>3)
@@ -88,7 +93,8 @@ def main_task():
                     if not state.running:
                         raise FailureException('Programm aborted.')
         except FailureException as e:
-            output_buffer.set_text(e.error)
+            f=e.failure
+            set_output(f.output, f.error)
             audio.stop()
             if state.playing:
                 state.switch_playing(None)
@@ -116,12 +122,12 @@ def compile_task(worker):
         response = worker.recv()
 
     if isinstance(response, Failure):
-        raise FailureException(response.error)
+        raise FailureException(response)
 
     assert isinstance(response, InitSuccess)
     audio.set_file(response.audio_file_name, state.file_name)
     scale.set_adjustment(Gtk.Adjustment(0,0,response.animation_duration))
-    output_buffer.set_text('')
+    set_output('','')
 
 def show_task(worker):
     while True:
@@ -157,7 +163,7 @@ def update_task(worker, target_time = 0):
     while True:
         response = worker.recv()
         if isinstance(response, Failure):
-            raise FailureException(response.error)
+            raise FailureException(response)
         elif isinstance(response, Success):
             successful_response = response
             break
@@ -170,7 +176,7 @@ def update_task(worker, target_time = 0):
         current_time = get_time()
         if target_time < current_time:
             state.buffer_surface = successful_response.data.get_surface() #type: ignore
-            output_buffer.set_text(successful_response.result)
+            set_output(successful_response.result, '')
             drawing_area.queue_draw()
             break
         yield CB_TIME

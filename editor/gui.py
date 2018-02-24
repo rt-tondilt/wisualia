@@ -59,6 +59,15 @@ def set_status_bar_text(text):
     status_bar.pop(1)
     status_bar.push(1, text)
 
+RED_OUTPUT = output_buffer.create_tag(foreground_rgba = Gdk.RGBA(1,0.4,0.4,1),
+                                      weight = 900)
+
+def set_output(text, error):
+    buf=output_buffer
+    buf.remove_tag(RED_OUTPUT, buf.get_start_iter(), buf.get_end_iter())
+    buf.set_text(text)
+    buf.insert_with_tags(buf.get_end_iter(), error, RED_OUTPUT)
+
 
 color_tags = []
 

@@ -71,7 +71,8 @@ class Success(Response):
         self.result = result
 
 class Failure(Response):
-    def __init__(self, error: str) -> None:
+    def __init__(self, output: str, error: str) -> None:
+        self.output = output
         self.error = error
 
 
@@ -93,7 +94,9 @@ def worker_fn(con):
                     wisualia.animation.ANIMATION = None
 
                 code = compile(request.code, request.file_name, 'exec')
-                exec(code, vars)
+                f = StringIO()
+                with redirect_stdout(f):
+                    exec(code, vars)
                 wisualia = vars['wisualia']
                 animation_duration = vars['wisualia'].animation.ANIMATION.duration
                 audio_file_name = vars['wisualia'].animation.ANIMATION.audio
@@ -101,7 +104,11 @@ def worker_fn(con):
                         isinstance(animation_duration, int))
                 assert isinstance(audio_file_name, str) or audio_file_name == None
             except Exception:
-                con.send(Failure(get_error()))
+                output=''
+                try:
+                    output=f.getvalue()
+                except: pass
+                con.send(Failure(output, get_error()))
                 continue
             con.send(InitSuccess(animation_duration, audio_file_name))
             # TODO: Check whether wisualia was properly imported.
@@ -129,7 +136,11 @@ def worker_fn(con):
                 result = f.getvalue()
                 vars['wisualia'].animation.ANIMATION.camera.draw(cr)
             except Exception :
-                con.send(Failure(get_error()))
+                output=''
+                try:
+                    output=f.getvalue()
+                except: pass
+                con.send(Failure(output, get_error()))
                 return
             surf.flush()
             con.send(Success(BytesImage(surf), result)) #type: ignore

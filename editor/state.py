@@ -133,7 +133,7 @@ def typecheck(_):
     loop.start()
 
     if file_name is None:
-        output_buffer.set_text('File name missing.')
+        set_output('','File name missing.')
         return
 
     code = input_buffer.get_text(input_buffer.get_start_iter(), input_buffer.get_end_iter(), True)
@@ -145,7 +145,7 @@ def typecheck(_):
     if result == '':
         result = 'Typecheck: No errors were found.'
 
-    output_buffer.set_text(str(result).replace('\n', '\n\n'))
+    set_output('', str(result).replace('\n', '\n\n'))
 
 def show_help(_):
     webbrowser.open(os.path.abspath('../docs/_build/index.html'))
