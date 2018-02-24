@@ -72,7 +72,7 @@ def main_task():
             while True:
                 if state.compile_needed:
                     state.compile_needed = False
-                    set_status_bar_text('Programm starting.')
+                    set_status_bar_text('Program starting.')
                     # wait until worker is ready
                     for i in range(10):
                         if not worker.is_working():
@@ -84,14 +84,14 @@ def main_task():
                     yield from yield_from_while(compile_task(worker),
                         lambda: state.running and not state.compile_needed)
                     if not state.running:
-                        raise FailureException('Programm aborted.')
-                    set_status_bar_text('Programm running.')
+                        raise FailureException('Program aborted.')
+                    set_status_bar_text('Program running.')
 
                 else:
                     yield from yield_from_while(show_task(worker),
                         lambda: state.running and not state.compile_needed)
                     if not state.running:
-                        raise FailureException('Programm aborted.')
+                        raise FailureException('Program aborted.')
         except FailureException as e:
             f=e.failure
             set_output(f.output, f.error)

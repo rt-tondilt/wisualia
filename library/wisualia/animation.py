@@ -91,13 +91,13 @@ class _Animation(object):
         except Exception as e:
             print()
             print('ERROR WHILE WRITING VIDEO')
-            print('PROGRAMM OUTPUT:')
+            print('PROGRAM OUTPUT:')
             print(output_buf.getvalue())
             print('RERAISING EXCEPTION')
             raise e
         output = output_buf.getvalue()
         if output != '':
-            print('PROGRAMM OUTPUT:')
+            print('PROGRAM OUTPUT:')
             print(output)
             os.system('pause')
 

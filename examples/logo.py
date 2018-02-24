@@ -61,5 +61,6 @@ def loop(t):
             buf.append((x,y))
     fill(RGBA(0,0,0,0))
     draw_buf(buf, g)
+    print('Wisualia, t='+str(t))
     
 animate(loop, Camera((16,8),40))

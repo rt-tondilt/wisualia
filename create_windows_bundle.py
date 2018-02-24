@@ -28,7 +28,7 @@ if input(question).upper() != 'Y':
 
 default = 'home/Rando/wisualia'
 text = '''
-Enter path of wisualia-python relative to msys2 root directory.
+Enter path of wisualia relative to msys2 root directory.
 The default path is "{}"
 Enter path:'''.format(default)
 location = input(text)

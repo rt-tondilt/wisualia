@@ -2,6 +2,13 @@
 
 Program for generating animations with Python code.
 
-This program is an experimental prototype. It only works on Windows and inside a special environment. You can not use the program without the special environment.
+![Screenshot](screenshot.png)
 
-The special environment will be published later.
+**Warning: This program is an experimental prototype.**
+
+Wisualia currently works only on windows. There are two installation options:
+1. Download a windows bundle from the
+   [releases page](https://github.com/rt-tondilt/wisualia/releases).
+2. Follow complex
+   [installation instructions](msys2_installation_instructions.md)
+   for MSYS based environment.

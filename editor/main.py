@@ -18,7 +18,7 @@ def main() -> None:
     import loop
     from gui import window, set_status_bar_text
 
-    set_status_bar_text('No programm running')
+    set_status_bar_text('No program running')
 
     window.show_all()
     window.connect("delete-event", Gtk.main_quit)
