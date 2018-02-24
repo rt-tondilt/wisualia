@@ -50,7 +50,7 @@ def loop(t):
         t=9.2
     random.seed(t)
 
-    text((-6,-1),'Wisualila',3)
+    text((-5.8,-1),'Wisualia',3)
     (a,b),(c,d) = fill_extents()
     buf = []
     nr = int(t*150)
