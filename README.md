@@ -11,4 +11,6 @@ Wisualia currently works only on windows. There are two installation options:
    [releases page](https://github.com/rt-tondilt/wisualia/releases).
 2. Follow complex
    [installation instructions](msys2_installation_instructions.md)
-   for MSYS based environment.
+   for MSYS2 based environment.
+
+[Documentation](https://rt-tondilt.github.io/wisualia_documentation/).

@@ -39,7 +39,8 @@ extensions = ['sphinx.ext.autodoc',
     'sphinx.ext.intersphinx',
     'sphinx.ext.todo',
     'sphinx.ext.coverage',
-    'sphinx.ext.viewcode']
+    'sphinx.ext.viewcode',
+    'sphinx.ext.githubpages']
 
 autodoc_member_order = 'bysource'
 
@@ -55,6 +56,9 @@ wisualia_x.core.context.translate(150, 100)
 wisualia_x.core.context.scale(50, -50)
 os_x.chdir(r'{}')
 '''.format(wisualia_docs_path)
+
+# Include README.md
+html_extra_path = ['include']
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']

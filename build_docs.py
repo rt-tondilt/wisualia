@@ -2,6 +2,8 @@ import os
 import shutil
 import sys
 import subprocess
+from distutils import dir_util
+from datetime import datetime
 
 help_text='''
 Wisualia documentation generation script
@@ -37,6 +39,29 @@ def run(name, task):
     completed_process = subprocess.run(task)
 
 
+def publish():
+    now = datetime.now().isoformat()
+    print('          PUBLISHING DOCS')
+    print('====================================')
+
+    # TODO: Why shutil rmtree does not work
+    try_delete_dir = lambda: os.system(r'del docs\temp_repo /S /F /Q && rmdir docs\temp_repo /S /Q')
+
+    try_delete_dir()
+
+    task = ['git', 'clone', '--no-checkout',
+            'https://github.com/rt-tondilt/wisualia_documentation.git',
+            'docs/temp_repo']
+    run('git clone', task)
+    dir_util.copy_tree('docs/_build', 'docs/temp_repo')
+    os.chdir('docs/temp_repo')
+    run('git add', ['git', 'add', '.'])
+    run('git commit', ['git', 'commit', '-m"autocommit-{}"'.format(now)])
+    run('git push',['git', 'push'])
+    os.chdir('../../')
+    try_delete_dir()
+
+
 if len(sys.argv)==2:
     if sys.argv[1] in ['-h', '--help']:
         print(help_text)
@@ -47,6 +72,9 @@ if len(sys.argv)==2:
                 shutil.rmtree(place)
             except FileNotFoundError:
                 pass
+    elif sys.argv[1] == '--publish':
+        publish()
+        exit()
     else:
         print('ERROR: Unknown argument')
         print(help_text)

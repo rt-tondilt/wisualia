@@ -7,7 +7,8 @@ Wisualia
 ========
 
 Wisualia is a programmable environment that lets you create animations using
-Python 3 code.
+Python 3 code. Wisualia is available on
+`Github <https://github.com/rt-tondilt/wisualia>`_
 
 .. toctree::
    :maxdepth: 2

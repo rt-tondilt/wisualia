@@ -8,9 +8,7 @@ only once.**
 ## Installing MSYS2.
 
 Goto [MSYS2 homepage](http://www.msys2.org) and install MSYS2. Both 32- and
-64-bit installers should work.
-
-See also [MSYS2 wiki](https://github.com/msys2/msys2/wiki).
+64-bit installers should work. (See also [MSYS2 wiki](https://github.com/msys2/msys2/wiki)).
 
 Now we have to update MSYS2.
 

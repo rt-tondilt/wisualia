@@ -1,7 +1,0 @@
-wisualia\.geometry module
-=========================
-
-.. automodule:: wisualia.geometry
-    :members:
-    :undoc-members:
-    :show-inheritance:

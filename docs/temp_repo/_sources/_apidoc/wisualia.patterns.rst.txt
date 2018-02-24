@@ -1,7 +1,0 @@
-wisualia\.patterns module
-=========================
-
-.. automodule:: wisualia.patterns
-    :members:
-    :undoc-members:
-    :show-inheritance:
