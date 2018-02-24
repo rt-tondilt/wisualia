@@ -1,0 +1,378 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Getting started &#8212; Wisualia 0.0.1 documentation</title>
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Patterns and transformations" href="pat_and_trans.html" />
+    <link rel="prev" title="Tutorial" href="index.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="getting-started">
+<h1>Getting started<a class="headerlink" href="#getting-started" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="first-animation">
+<h2>First animation<a class="headerlink" href="#first-animation" title="Permalink to this headline">¶</a></h2>
+<p>Wisualia animations are defined with Python source files. However not each Python
+source file can also be used by Wisualia. Python files that are used by Wisualia must
+follow these rules:</p>
+<ul class="simple">
+<li>The file must import Wisualia library like <code class="docutils literal"><span class="pre">import</span> <span class="pre">wisualia</span></code>. The editor finds imported
+library by it’s name so <code class="docutils literal"><span class="pre">from</span> <span class="pre">wisualia</span> <span class="pre">import</span> <span class="pre">*</span></code> and <code class="docutils literal"><span class="pre">import</span> <span class="pre">wisualia</span> <span class="pre">as</span> <span class="pre">othername</span></code>
+do not work.</li>
+<li>The file must call <a class="reference internal" href="../_apidoc/wisualia.animation.html#wisualia.animation.animate" title="wisualia.animation.animate"><code class="xref py py-func docutils literal"><span class="pre">wisualia.animation.animate()</span></code></a>.The first argument of
+this function is the loop function.</li>
+<li>The loop function will be called each time a new frame needs to be drawn.
+The only argument of the loop function is the current time from the start of
+the animation in seconds.</li>
+</ul>
+<p>Here is an example of minimal proper Wisualia file.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">wisualia</span>
+<span class="kn">from</span> <span class="nn">wisualia.animation</span> <span class="k">import</span> <span class="n">animate</span>
+
+<span class="k">def</span> <span class="nf">loop</span><span class="p">(</span><span class="n">time</span><span class="p">):</span>
+    <span class="k">pass</span>
+
+<span class="n">animate</span><span class="p">(</span><span class="n">loop</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Note that this file does nothing by itself, for real animation we have to add
+something to draw.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">wisualia</span>
+<span class="kn">from</span> <span class="nn">wisualia.animation</span> <span class="k">import</span> <span class="n">animate</span>
+<span class="kn">from</span> <span class="nn">wisualia.shapes</span> <span class="k">import</span> <span class="n">circle</span>
+<span class="kn">from</span> <span class="nn">wisualia.do</span> <span class="k">import</span> <span class="n">fill</span>
+
+<span class="k">def</span> <span class="nf">loop</span><span class="p">(</span><span class="n">time</span><span class="p">):</span>
+    <span class="n">circle</span><span class="p">()</span>
+    <span class="n">fill</span><span class="p">()</span>
+
+<span class="n">animate</span><span class="p">(</span><span class="n">loop</span><span class="p">)</span>
+</pre></div>
+</div>
+<img alt="../_images/first_circle.png" src="../_images/first_circle.png" />
+<p>In this code <code class="docutils literal"><span class="pre">circle()</span></code> defines the shape we want to draw and <code class="docutils literal"><span class="pre">fill()</span></code> says
+that we want to fill the shape with a color. The position and color of the
+circle shown above depend on the default arguments of <code class="docutils literal"><span class="pre">circle()</span></code> and
+<code class="docutils literal"><span class="pre">fill()</span></code>. Of course we can choose our own values.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">wisualia</span>
+<span class="kn">from</span> <span class="nn">wisualia.animation</span> <span class="k">import</span> <span class="n">animate</span>
+<span class="kn">from</span> <span class="nn">wisualia.shapes</span> <span class="k">import</span> <span class="n">circle</span>
+<span class="kn">from</span> <span class="nn">wisualia.do</span> <span class="k">import</span> <span class="n">fill</span>
+<span class="kn">from</span> <span class="nn">wisualia.patterns</span> <span class="k">import</span> <span class="n">RGBA</span>
+
+<span class="k">def</span> <span class="nf">loop</span><span class="p">(</span><span class="n">time</span><span class="p">):</span>
+    <span class="n">circle</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="mi">1</span><span class="o">+</span><span class="n">time</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span> <span class="c1"># centre point and radius</span>
+    <span class="n">fill</span><span class="p">(</span><span class="n">RGBA</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+
+<span class="n">animate</span><span class="p">(</span><span class="n">loop</span><span class="p">)</span>
+</pre></div>
+</div>
+<img alt="../_images/second_circle.png" src="../_images/second_circle.png" />
+<p>Resulting animation of “growing” circle at 1 second.</p>
+<p>We can use <code class="docutils literal"><span class="pre">stroke()</span></code> function to draw the edges of the shape.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">wisualia</span>
+<span class="kn">from</span> <span class="nn">wisualia.animation</span> <span class="k">import</span> <span class="n">animate</span>
+<span class="kn">from</span> <span class="nn">wisualia.shapes</span> <span class="k">import</span> <span class="n">polygon</span>
+<span class="kn">from</span> <span class="nn">wisualia.do</span> <span class="k">import</span> <span class="n">fill</span><span class="p">,</span> <span class="n">stroke</span>
+<span class="kn">from</span> <span class="nn">wisualia.patterns</span> <span class="k">import</span> <span class="n">RGBA</span>
+
+<span class="k">def</span> <span class="nf">loop</span><span class="p">(</span><span class="n">time</span><span class="p">):</span>
+    <span class="n">polygon</span><span class="p">((</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">),</span> <span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">),</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">),</span> <span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">))</span>
+    <span class="n">fill</span><span class="p">(</span><span class="n">RGBA</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">))</span> <span class="c1"># Note that you can ommit the alpha value.</span>
+    <span class="n">stroke</span><span class="p">(</span><span class="mf">0.4</span><span class="p">,</span> <span class="n">RGBA</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mf">0.5</span><span class="p">))</span> <span class="c1"># Line width and color</span>
+
+<span class="n">animate</span><span class="p">(</span><span class="n">loop</span><span class="p">)</span>
+</pre></div>
+</div>
+<img alt="../_images/stroke_1.png" src="../_images/stroke_1.png" />
+<p>Here the stroke is 50% transparent and we can see the edge of underlying filled
+area. Try switching the order of <code class="docutils literal"><span class="pre">fill()</span></code> and <code class="docutils literal"><span class="pre">stoke()</span></code> operations and
+compare the result.</p>
+</div>
+<div class="section" id="holes-and-intersecting-shapes">
+<h2>Holes and intersecting shapes.<a class="headerlink" href="#holes-and-intersecting-shapes" title="Permalink to this headline">¶</a></h2>
+<p>We can make holes by defining two shapes and filling them together.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">wisualia</span>
+<span class="kn">from</span> <span class="nn">wisualia.animation</span> <span class="k">import</span> <span class="n">animate</span>
+<span class="kn">from</span> <span class="nn">wisualia.shapes</span> <span class="k">import</span> <span class="n">circle</span><span class="p">,</span> <span class="n">polygon</span>
+<span class="kn">from</span> <span class="nn">wisualia.do</span> <span class="k">import</span> <span class="n">fill</span>
+<span class="kn">from</span> <span class="nn">wisualia.patterns</span> <span class="k">import</span> <span class="n">RGBA</span>
+
+<span class="k">def</span> <span class="nf">loop</span><span class="p">(</span><span class="n">time</span><span class="p">):</span>
+    <span class="n">polygon</span><span class="p">((</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">),(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">),(</span><span class="mi">2</span><span class="p">,</span><span class="mi">0</span><span class="p">))</span>
+    <span class="n">circle</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">),</span><span class="mf">0.5</span><span class="p">)</span>
+    <span class="n">fill</span><span class="p">(</span><span class="n">RGBA</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">))</span>
+
+<span class="n">animate</span><span class="p">(</span><span class="n">loop</span><span class="p">)</span>
+</pre></div>
+</div>
+<img alt="../_images/hole_1.png" src="../_images/hole_1.png" />
+<p>This is different from defining two shapes and filling them separately.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">wisualia</span>
+<span class="kn">from</span> <span class="nn">wisualia.animation</span> <span class="k">import</span> <span class="n">animate</span>
+<span class="kn">from</span> <span class="nn">wisualia.shapes</span> <span class="k">import</span> <span class="n">circle</span><span class="p">,</span> <span class="n">polygon</span>
+<span class="kn">from</span> <span class="nn">wisualia.do</span> <span class="k">import</span> <span class="n">fill</span>
+<span class="kn">from</span> <span class="nn">wisualia.patterns</span> <span class="k">import</span> <span class="n">RGBA</span>
+
+<span class="k">def</span> <span class="nf">loop</span><span class="p">(</span><span class="n">time</span><span class="p">):</span>
+    <span class="n">polygon</span><span class="p">((</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">),(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">),(</span><span class="mi">2</span><span class="p">,</span><span class="mi">0</span><span class="p">))</span>
+    <span class="n">fill</span><span class="p">(</span><span class="n">RGBA</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">))</span>
+
+    <span class="n">circle</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">),</span><span class="mf">0.5</span><span class="p">)</span>
+    <span class="n">fill</span><span class="p">(</span><span class="n">RGBA</span><span class="p">(</span><span class="mf">0.2</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">))</span>
+
+<span class="n">animate</span><span class="p">(</span><span class="n">loop</span><span class="p">)</span>
+</pre></div>
+</div>
+<img alt="../_images/hole_2.png" src="../_images/hole_2.png" />
+<p>We can also define two intersecting shapes and fill them together.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">wisualia</span>
+<span class="kn">from</span> <span class="nn">wisualia.animation</span> <span class="k">import</span> <span class="n">animate</span>
+<span class="kn">from</span> <span class="nn">wisualia.shapes</span> <span class="k">import</span> <span class="n">circle</span><span class="p">,</span> <span class="n">polygon</span>
+<span class="kn">from</span> <span class="nn">wisualia.do</span> <span class="k">import</span> <span class="n">fill</span>
+<span class="kn">from</span> <span class="nn">wisualia.patterns</span> <span class="k">import</span> <span class="n">RGBA</span>
+
+<span class="k">def</span> <span class="nf">loop</span><span class="p">(</span><span class="n">time</span><span class="p">):</span>
+    <span class="n">polygon</span><span class="p">((</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">),(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">),(</span><span class="mi">2</span><span class="p">,</span><span class="mi">0</span><span class="p">))</span>
+    <span class="n">circle</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">),</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">fill</span><span class="p">(</span><span class="n">RGBA</span><span class="p">(</span><span class="mf">0.2</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">))</span>
+
+<span class="n">animate</span><span class="p">(</span><span class="n">loop</span><span class="p">)</span>
+</pre></div>
+</div>
+<img alt="../_images/hole_3.png" src="../_images/hole_3.png" />
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Filling is currently done with <code class="docutils literal"><span class="pre">cairo.FillRule.EVEN_ODD</span></code>. TODO: Explain
+more.</p>
+</div>
+</div>
+<div class="section" id="automatical-clearing-of-already-used-shapes">
+<h2>Automatical clearing of already used shapes<a class="headerlink" href="#automatical-clearing-of-already-used-shapes" title="Permalink to this headline">¶</a></h2>
+<p>The <code class="docutils literal"><span class="pre">fill()</span></code> and <code class="docutils literal"><span class="pre">stroke()</span></code> operations apply to the previously defined
+shapes. You can define any number of shapes and then fill and stroke them
+together. You can also also fill or stroke the previously defined shapes
+multiple times.</p>
+<p>However after you have defined the shapes and filled or stroked them any number
+of times, the shapes are automatically cleared.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">wisualia</span>
+<span class="kn">from</span> <span class="nn">wisualia.animation</span> <span class="k">import</span> <span class="n">animate</span>
+<span class="kn">from</span> <span class="nn">wisualia.shapes</span> <span class="k">import</span> <span class="n">circle</span>
+<span class="kn">from</span> <span class="nn">wisualia.do</span> <span class="k">import</span> <span class="n">fill</span><span class="p">,</span> <span class="n">stroke</span>
+<span class="kn">from</span> <span class="nn">wisualia.patterns</span> <span class="k">import</span> <span class="n">RGBA</span>
+
+<span class="k">def</span> <span class="nf">loop</span><span class="p">(</span><span class="n">time</span><span class="p">):</span>
+    <span class="n">circle</span><span class="p">((</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">),</span> <span class="mf">0.5</span><span class="p">)</span>
+    <span class="n">stroke</span><span class="p">(</span><span class="mf">0.3</span><span class="p">,</span> <span class="n">RGBA</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">))</span>
+    <span class="n">stroke</span><span class="p">(</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">RGBA</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">))</span>
+
+    <span class="c1"># Here after the first circle has been defined and used</span>
+    <span class="c1"># and before the second circle is defined, the first</span>
+    <span class="c1"># circle is automatically cleared.</span>
+
+    <span class="n">circle</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">),</span> <span class="mf">0.5</span><span class="p">)</span>
+    <span class="n">fill</span><span class="p">(</span><span class="n">RGBA</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mf">0.5</span><span class="p">,</span><span class="mi">0</span><span class="p">))</span> <span class="c1"># Here only the second circle is filled.</span>
+
+<span class="n">animate</span><span class="p">(</span><span class="n">loop</span><span class="p">)</span>
+</pre></div>
+</div>
+<img alt="../_images/clearing.png" src="../_images/clearing.png" />
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>The automatical clearing actually happens inside the following shape. The
+simplified implementation is shown below.</p>
+<div class="last highlight-default"><div class="highlight"><pre><span></span><span class="n">clearing_is_needed</span> <span class="o">=</span> <span class="kc">False</span>
+<span class="k">def</span> <span class="nf">fill</span><span class="p">(</span><span class="o">...</span><span class="p">):</span>
+    <span class="k">global</span> <span class="n">clearing_is_needed</span>
+    <span class="n">clearing_is_needed</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="o">...</span>
+<span class="k">def</span> <span class="nf">stroke</span><span class="p">(</span><span class="o">...</span><span class="p">):</span>
+    <span class="k">global</span> <span class="n">clearing_is_needed</span>
+    <span class="n">clearing_is_needed</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="o">...</span>
+<span class="k">def</span> <span class="nf">circle</span><span class="p">(</span><span class="o">...</span><span class="p">):</span> <span class="c1"># or any other shape</span>
+    <span class="k">global</span> <span class="n">clearing_is_needed</span>
+    <span class="k">if</span> <span class="n">clearing_is_needed</span><span class="p">:</span>
+        <span class="n">clear</span><span class="p">()</span> <span class="c1"># &lt;--- actual clearing operation</span>
+        <span class="n">clearing_is_needed</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="o">...</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="exporting-animations">
+<h2>Exporting animations<a class="headerlink" href="#exporting-animations" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic simple">
+<li>Ensure that you have saved the file.</li>
+<li>Click on the Export button and wait.</li>
+</ol>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">All wisualia files are python source files, which means, that they are runnable.
+The export button uses this mechanism. In the future exporting a file could be
+as easy as writting <code class="docutils literal"><span class="pre">your_wisualia_file.py</span> <span class="pre">animate</span></code> to the console.</p>
+</div>
+</div>
+<div class="section" id="possible-mistakes-and-other-suprising-behaviour">
+<h2>Possible mistakes and other suprising behaviour<a class="headerlink" href="#possible-mistakes-and-other-suprising-behaviour" title="Permalink to this headline">¶</a></h2>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">All Wisualia functions that accept floats as arguments also work with integers.
+However, infinite and other unusual float values have not been tested and
+might result in <strong>any</strong> behaviour.</p>
+</div>
+<p><strong>Don’t change global variables from the loop function.</strong> For example the following
+code behaves in a quite nonsensical way (try zooming in and out, moving the view
+or changing the time).</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">wisualia</span>
+<span class="kn">from</span> <span class="nn">wisualia.animation</span> <span class="k">import</span> <span class="n">animate</span>
+<span class="kn">from</span> <span class="nn">wisualia.shapes</span> <span class="k">import</span> <span class="n">circle</span>
+
+<span class="n">n</span> <span class="o">=</span> <span class="mi">0</span>
+
+<span class="k">def</span> <span class="nf">loop</span><span class="p">(</span><span class="n">time</span><span class="p">):</span>
+    <span class="k">global</span> <span class="n">n</span>
+    <span class="n">circle</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">),</span> <span class="p">(</span><span class="n">n</span><span class="o">%</span><span class="mi">10</span><span class="p">)</span><span class="o">*</span><span class="mf">0.2</span><span class="p">)</span>
+    <span class="n">n</span> <span class="o">+=</span> <span class="mi">1</span>
+
+<span class="n">animate</span><span class="p">(</span><span class="n">loop</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>Don’t change imported modules at runtime.</strong> For example lets say that you have
+following code inside the editor and it is displaying a rectangle.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">wisualia</span>
+<span class="kn">from</span> <span class="nn">wisualia.animation</span> <span class="k">import</span> <span class="n">animate</span>
+<span class="kn">from</span> <span class="nn">wisualia</span> <span class="k">import</span> <span class="n">shapes</span>
+
+<span class="n">shapes</span><span class="o">.</span><span class="n">circle</span> <span class="o">=</span> <span class="n">shapes</span><span class="o">.</span><span class="n">rect</span>
+
+<span class="k">def</span> <span class="nf">loop</span><span class="p">(</span><span class="n">t</span><span class="p">):</span>
+    <span class="n">wisualia</span><span class="o">.</span><span class="n">shapes</span><span class="o">.</span><span class="n">circle</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">),(</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="o">+</span><span class="n">t</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Drawing completed&#39;</span><span class="p">)</span>
+<span class="n">animate</span><span class="p">(</span><span class="n">loop</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Now lets comment away this stupid assignment by inserting the <code class="docutils literal"><span class="pre">#</span></code> symbol.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">wisualia</span>
+<span class="kn">from</span> <span class="nn">wisualia.animation</span> <span class="k">import</span> <span class="n">animate</span>
+<span class="kn">from</span> <span class="nn">wisualia</span> <span class="k">import</span> <span class="n">shapes</span>
+
+<span class="c1">#shapes.circle = shapes.rect</span>
+
+<span class="k">def</span> <span class="nf">loop</span><span class="p">(</span><span class="n">t</span><span class="p">):</span>
+    <span class="n">wisualia</span><span class="o">.</span><span class="n">shapes</span><span class="o">.</span><span class="n">circle</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">),(</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="o">+</span><span class="n">t</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Drawing completed&#39;</span><span class="p">)</span>
+<span class="n">animate</span><span class="p">(</span><span class="n">loop</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Now lets press the Play button. It still shows a growing rectangle.</p>
+<p>This happens because we changed a variable inside a module. The Python interpreter
+can’t really reload already imported modules. That is why we have to restart the interpreter
+if we have changed the source code of an imported module or we have changed the
+module at runtime (as we did right now). The easiest way to restart the
+interpreter, is to click the Run/Abort button twice.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">Wisualia</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../install.html">Install</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Tutorial</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Getting started</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pat_and_trans.html">Patterns and transformations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="images.html">Images</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../wisualia_library.html">Wisualia library</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="index.html">Tutorial</a><ul>
+      <li>Previous: <a href="index.html" title="previous chapter">Tutorial</a></li>
+      <li>Next: <a href="pat_and_trans.html" title="next chapter">Patterns and transformations</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2017, rt-tondilt.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.6.7</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      
+      |
+      <a href="../_sources/tutorial/getting_started.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

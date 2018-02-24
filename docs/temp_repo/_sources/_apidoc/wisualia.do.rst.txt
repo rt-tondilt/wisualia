@@ -1,0 +1,7 @@
+wisualia\.do module
+===================
+
+.. automodule:: wisualia.do
+    :members:
+    :undoc-members:
+    :show-inheritance:

@@ -1,0 +1,7 @@
+wisualia\.shapes module
+=======================
+
+.. automodule:: wisualia.shapes
+    :members:
+    :undoc-members:
+    :show-inheritance:

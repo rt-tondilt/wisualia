@@ -1,0 +1,7 @@
+wisualia\.pencil module
+=======================
+
+.. automodule:: wisualia.pencil
+    :members:
+    :undoc-members:
+    :show-inheritance:

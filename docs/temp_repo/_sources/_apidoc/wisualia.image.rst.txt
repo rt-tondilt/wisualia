@@ -1,0 +1,7 @@
+wisualia\.image module
+======================
+
+.. automodule:: wisualia.image
+    :members:
+    :undoc-members:
+    :show-inheritance:

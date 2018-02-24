@@ -1,0 +1,71 @@
+Results of doctest builder run on 2018-02-24 19:52:15
+=====================================================
+
+Document: tutorial/pat_and_trans
+--------------------------------
+6 items passed all tests:
+   1 tests in first_fill
+   1 tests in first_image
+   1 tests in first_rotation
+   1 tests in multiple_transformations
+   1 tests in second_image
+   1 tests in second_rotation
+6 tests in 6 items.
+6 passed and 0 failed.
+Test passed.
+6 items passed all tests:
+   1 tests in first_fill (cleanup code)
+   1 tests in first_image (cleanup code)
+   1 tests in first_rotation (cleanup code)
+   1 tests in multiple_transformations (cleanup code)
+   1 tests in second_image (cleanup code)
+   1 tests in second_rotation (cleanup code)
+6 tests in 6 items.
+6 passed and 0 failed.
+Test passed.
+
+Document: _apidoc/wisualia.patterns
+-----------------------------------
+1 items passed all tests:
+   1 tests in default
+1 tests in 1 items.
+1 passed and 0 failed.
+Test passed.
+1 items passed all tests:
+   1 tests in default (cleanup code)
+1 tests in 1 items.
+1 passed and 0 failed.
+Test passed.
+
+Document: tutorial/getting_started
+----------------------------------
+8 items passed all tests:
+   1 tests in clearing
+   2 tests in default
+   1 tests in first_circle
+   1 tests in hole_1
+   1 tests in hole_2
+   1 tests in hole_3
+   1 tests in second_circle
+   1 tests in stroke_1
+9 tests in 8 items.
+9 passed and 0 failed.
+Test passed.
+7 items passed all tests:
+   1 tests in clearing (cleanup code)
+   1 tests in first_circle (cleanup code)
+   1 tests in hole_1 (cleanup code)
+   1 tests in hole_2 (cleanup code)
+   1 tests in hole_3 (cleanup code)
+   1 tests in second_circle (cleanup code)
+   1 tests in stroke_1 (cleanup code)
+7 tests in 7 items.
+7 passed and 0 failed.
+Test passed.
+
+Doctest summary
+===============
+   16 tests
+    0 failures in tests
+    0 failures in setup code
+    0 failures in cleanup code

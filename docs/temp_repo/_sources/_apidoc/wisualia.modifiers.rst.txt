@@ -1,0 +1,7 @@
+wisualia\.modifiers module
+==========================
+
+.. automodule:: wisualia.modifiers
+    :members:
+    :undoc-members:
+    :show-inheritance:

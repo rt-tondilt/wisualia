@@ -1,0 +1,269 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>wisualia.patterns module &#8212; Wisualia 0.0.1 documentation</title>
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="wisualia.pencil module" href="wisualia.pencil.html" />
+    <link rel="prev" title="wisualia.modifiers module" href="wisualia.modifiers.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-wisualia.patterns">
+<span id="wisualia-patterns-module"></span><h1>wisualia.patterns module<a class="headerlink" href="#module-wisualia.patterns" title="Permalink to this headline">¶</a></h1>
+<p>Patterns</p>
+<p>A pattern is a paint that is used for drawing. Patterns can be used to fill
+shapes or to draw lines.</p>
+<dl class="class">
+<dt id="wisualia.patterns.Pattern">
+<em class="property">class </em><code class="descclassname">wisualia.patterns.</code><code class="descname">Pattern</code><span class="sig-paren">(</span><em>cairo_pattern</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/wisualia/patterns.html#Pattern"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#wisualia.patterns.Pattern" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3.6/library/functions.html#object" title="(in Python v3.6)"><code class="xref py py-class docutils literal"><span class="pre">object</span></code></a></p>
+<p>A base class of all patterns.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>cairo_pattern</strong> – an internal cairo_pattern</td>
+</tr>
+</tbody>
+</table>
+<p>Users should not use it.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="wisualia.patterns.RGBA">
+<em class="property">class </em><code class="descclassname">wisualia.patterns.</code><code class="descname">RGBA</code><span class="sig-paren">(</span><em>r</em>, <em>g</em>, <em>b</em>, <em>a=1</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/wisualia/patterns.html#RGBA"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#wisualia.patterns.RGBA" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#wisualia.patterns.Pattern" title="wisualia.patterns.Pattern"><code class="xref py py-class docutils literal"><span class="pre">wisualia.patterns.Pattern</span></code></a></p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>r</strong> (<a class="reference external" href="https://docs.python.org/3.6/library/functions.html#float" title="(in Python v3.6)"><code class="xref py py-class docutils literal"><span class="pre">float</span></code></a>) – red</li>
+<li><strong>g</strong> (<a class="reference external" href="https://docs.python.org/3.6/library/functions.html#float" title="(in Python v3.6)"><code class="xref py py-class docutils literal"><span class="pre">float</span></code></a>) – green</li>
+<li><strong>b</strong> (<a class="reference external" href="https://docs.python.org/3.6/library/functions.html#float" title="(in Python v3.6)"><code class="xref py py-class docutils literal"><span class="pre">float</span></code></a>) – blue</li>
+<li><strong>a</strong> (<a class="reference external" href="https://docs.python.org/3.6/library/functions.html#float" title="(in Python v3.6)"><code class="xref py py-class docutils literal"><span class="pre">float</span></code></a>) – alpha</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p>Solid color Pattern.</p>
+<p>All arguments are in range 0 to 1. Values that are
+outside of that range will be clamped when drawn.</p>
+<dl class="method">
+<dt id="wisualia.patterns.RGBA.get_rgba">
+<code class="descname">get_rgba</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/wisualia/patterns.html#RGBA.get_rgba"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#wisualia.patterns.RGBA.get_rgba" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns rgba values as a tuple of floats.
+Values may be outside of range 0 to 1.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><code class="xref py py-class docutils literal"><span class="pre">Tuple</span></code>[<a class="reference external" href="https://docs.python.org/3.6/library/functions.html#float" title="(in Python v3.6)"><code class="xref py py-class docutils literal"><span class="pre">float</span></code></a>, <a class="reference external" href="https://docs.python.org/3.6/library/functions.html#float" title="(in Python v3.6)"><code class="xref py py-class docutils literal"><span class="pre">float</span></code></a>, <a class="reference external" href="https://docs.python.org/3.6/library/functions.html#float" title="(in Python v3.6)"><code class="xref py py-class docutils literal"><span class="pre">float</span></code></a>, <a class="reference external" href="https://docs.python.org/3.6/library/functions.html#float" title="(in Python v3.6)"><code class="xref py py-class docutils literal"><span class="pre">float</span></code></a>]</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="wisualia.patterns.HSVA">
+<code class="descclassname">wisualia.patterns.</code><code class="descname">HSVA</code><span class="sig-paren">(</span><em>h</em>, <em>s=1</em>, <em>v=1</em>, <em>a=1</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/wisualia/patterns.html#HSVA"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#wisualia.patterns.HSVA" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>h</strong> (<a class="reference external" href="https://docs.python.org/3.6/library/functions.html#float" title="(in Python v3.6)"><code class="xref py py-class docutils literal"><span class="pre">float</span></code></a>) – hue</li>
+<li><strong>s</strong> (<a class="reference external" href="https://docs.python.org/3.6/library/functions.html#float" title="(in Python v3.6)"><code class="xref py py-class docutils literal"><span class="pre">float</span></code></a>) – saturation</li>
+<li><strong>v</strong> (<a class="reference external" href="https://docs.python.org/3.6/library/functions.html#float" title="(in Python v3.6)"><code class="xref py py-class docutils literal"><span class="pre">float</span></code></a>) – value</li>
+<li><strong>a</strong> (<a class="reference external" href="https://docs.python.org/3.6/library/functions.html#float" title="(in Python v3.6)"><code class="xref py py-class docutils literal"><span class="pre">float</span></code></a>) – alpha</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first"><a class="reference internal" href="#wisualia.patterns.RGBA" title="wisualia.patterns.RGBA"><code class="xref py py-class docutils literal"><span class="pre">RGBA</span></code></a></p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Color with all values in range 0 to 1</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p>Convenience function that creates RGBA Pattern.</p>
+<p>All hue values that are outside of range 0 to 1 are divided by 1 and the
+reminder is used as the hue. This means that hue values 1.3, 7.3, and -2.3
+all produce the same color. All other parameters that are outside of that
+range will be clamped.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">wisualia</span>
+<span class="kn">from</span> <span class="nn">wisualia.shapes</span> <span class="k">import</span> <span class="n">circle</span>
+<span class="n">circle</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">),</span> <span class="mf">0.5</span><span class="p">)</span>
+</pre></div>
+</div>
+<img alt="../_images/circle.png" src="../_images/circle.png" />
+</dd></dl>
+
+<dl class="function">
+<dt id="wisualia.patterns.LinearGradient">
+<code class="descclassname">wisualia.patterns.</code><code class="descname">LinearGradient</code><span class="sig-paren">(</span><em>start</em>, <em>end</em>, <em>color_stops</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/wisualia/patterns.html#LinearGradient"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#wisualia.patterns.LinearGradient" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>start</strong> (<a class="reference internal" href="wisualia.geometry.html#wisualia.geometry.PointLike" title="wisualia.geometry.PointLike"><code class="xref py py-class docutils literal"><span class="pre">PointLike</span></code></a>[]) – starting point of the line</li>
+<li><strong>end</strong> (<a class="reference internal" href="wisualia.geometry.html#wisualia.geometry.PointLike" title="wisualia.geometry.PointLike"><code class="xref py py-class docutils literal"><span class="pre">PointLike</span></code></a>[]) – ending point of the line</li>
+<li><strong>color_stops</strong> (<a class="reference external" href="https://docs.python.org/3.6/library/typing.html#typing.Sequence" title="(in Python v3.6)"><code class="xref py py-class docutils literal"><span class="pre">Sequence</span></code></a>[<code class="xref py py-class docutils literal"><span class="pre">Tuple</span></code>[<a class="reference external" href="https://docs.python.org/3.6/library/functions.html#float" title="(in Python v3.6)"><code class="xref py py-class docutils literal"><span class="pre">float</span></code></a>, <a class="reference internal" href="#wisualia.patterns.RGBA" title="wisualia.patterns.RGBA"><code class="xref py py-class docutils literal"><span class="pre">RGBA</span></code></a>]]) – relative locations on the gradient control vector</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p>Creates linear gradient along a straight line.
+Selgitus saa oled.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#wisualia.patterns.Pattern" title="wisualia.patterns.Pattern"><code class="xref py py-class docutils literal"><span class="pre">Pattern</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="wisualia.patterns.RadialGradient">
+<code class="descclassname">wisualia.patterns.</code><code class="descname">RadialGradient</code><span class="sig-paren">(</span><em>start_centre</em>, <em>start_radius</em>, <em>end_centre</em>, <em>end_radius</em>, <em>color_stops</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/wisualia/patterns.html#RadialGradient"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#wisualia.patterns.RadialGradient" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#wisualia.patterns.Pattern" title="wisualia.patterns.Pattern"><code class="xref py py-class docutils literal"><span class="pre">Pattern</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="wisualia.patterns.ImagePattern">
+<code class="descclassname">wisualia.patterns.</code><code class="descname">ImagePattern</code><span class="sig-paren">(</span><em>image</em>, <em>pixels_per_unit</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/wisualia/patterns.html#ImagePattern"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#wisualia.patterns.ImagePattern" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#wisualia.patterns.Pattern" title="wisualia.patterns.Pattern"><code class="xref py py-class docutils literal"><span class="pre">Pattern</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">Wisualia</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../install.html">Install</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorial/index.html">Tutorial</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../wisualia_library.html">Wisualia library</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="wisualia.animation.html">wisualia.animation module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="wisualia.core.html">wisualia.core module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="wisualia.do.html">wisualia.do module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="wisualia.geometry.html">wisualia.geometry module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="wisualia.image.html">wisualia.image module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="wisualia.modifiers.html">wisualia.modifiers module</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">wisualia.patterns module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="wisualia.pencil.html">wisualia.pencil module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="wisualia.shapes.html">wisualia.shapes module</a></li>
+</ul>
+</li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="../wisualia_library.html">Wisualia library</a><ul>
+      <li>Previous: <a href="wisualia.modifiers.html" title="previous chapter">wisualia.modifiers module</a></li>
+      <li>Next: <a href="wisualia.pencil.html" title="next chapter">wisualia.pencil module</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2017, rt-tondilt.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.6.7</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      
+      |
+      <a href="../_sources/_apidoc/wisualia.patterns.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

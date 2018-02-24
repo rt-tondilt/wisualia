@@ -1,0 +1,7 @@
+wisualia\.animation module
+==========================
+
+.. automodule:: wisualia.animation
+    :members:
+    :undoc-members:
+    :show-inheritance:

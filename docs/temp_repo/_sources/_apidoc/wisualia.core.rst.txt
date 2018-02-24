@@ -1,0 +1,7 @@
+wisualia\.core module
+=====================
+
+.. automodule:: wisualia.core
+    :members:
+    :undoc-members:
+    :show-inheritance:
