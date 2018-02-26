@@ -115,9 +115,10 @@ def LinearGradient(start:PointLike,
         start: starting point of the line
         end: ending point of the line
         color_stops: relative locations on the gradient control vector
+    Returns:
+        A Pattern object.
 
     Creates linear gradient along a straight line.
-    Selgitus saa oled.
     '''
     gradient = cairo.LinearGradient(*start, *end)
     for offset, color in color_stops:
@@ -129,6 +130,18 @@ def RadialGradient(start_centre:PointLike,
                    end_centre:PointLike,
                    end_radius:float,
                    color_stops:Sequence[Tuple[float, RGBA]]) -> Pattern:
+    '''
+    Args:
+        start_centre:
+        start_radius:
+        end_centre:
+        end_radius:
+        color_stops: relative locations on the gradient control vector
+    Returns:
+        A Pattern object.
+
+    Creates radial gradient along a straight line.
+    '''
     gradient = cairo.RadialGradient(*start_centre, start_radius,
                                     *end_centre, end_radius)
     for offset, color in color_stops:
@@ -136,12 +149,21 @@ def RadialGradient(start_centre:PointLike,
     return Pattern(gradient)
 
 def ImagePattern(image:Image, pixels_per_unit:float) -> Pattern:
-        cr = core.context
-        cr.save()
-        cr.scale(1/pixels_per_unit, 1/pixels_per_unit)
-        pattern = Pattern(cairo.SurfacePattern(image.surf))
-        cr.restore()
-        return pattern
+    '''
+    Args:
+        image:
+        pixels_per_unit:
+    Returns:
+        A Pattern object.
+
+    Creates ImagePattern.
+    '''
+    cr = core.context
+    cr.save()
+    cr.scale(1/pixels_per_unit, 1/pixels_per_unit)
+    pattern = Pattern(cairo.SurfacePattern(image.surf))
+    cr.restore()
+    return pattern
 
 
 RED = RGBA(1,0,0)
