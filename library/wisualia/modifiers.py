@@ -4,6 +4,14 @@ from  wisualia.geometry import PointLike
 from math import radians
 
 @derive_repr
+class DoNothing(Modifier):
+    '''
+    Literally does nothing.
+    '''
+    def modify(self, cr): #type: ignore
+        pass
+
+@derive_repr
 class Move(Modifier):
     '''
     Args:
