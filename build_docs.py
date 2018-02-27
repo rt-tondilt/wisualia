@@ -18,10 +18,15 @@ Arguments:
 
     -h, --help    Show this help text.
 
-    --clean       Delete all built documentation files in _apidoc and _build
-                  directories and regenerate all files. This option
+    --clean       Delete all built documentation files in _apidoc, _build and
+                  _images directories and regenerate all files. This option
                   is neccessary if you have deleted or renamed files and
                   might also be neccessary if you have changed .rst files.
+
+    --publish     Publish generated documentation in _build directory to
+                  the wisualia_documentation Github repository. Use it only
+                  after successfully running "build_docs.py --clean". Requires
+                  git in PATH variable and Github username and password.
 '''
 
 import __main__
