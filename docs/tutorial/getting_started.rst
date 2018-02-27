@@ -284,12 +284,14 @@ or changing the time).
   import wisualia
   from wisualia.animation import animate
   from wisualia.shapes import circle
+  from wisualia.do import fill
 
   n = 0
 
   def loop(time):
       global n
       circle((0,0), (n%10)*0.2)
+      fill()
       n += 1
 
   animate(loop)
@@ -302,6 +304,7 @@ following code inside the editor and it is displaying a rectangle.
 ::
 
   import wisualia
+  from wisualia.do import fill
   from wisualia.animation import animate
   from wisualia import shapes
 
@@ -309,12 +312,14 @@ following code inside the editor and it is displaying a rectangle.
 
   def loop(t):
       wisualia.shapes.circle((0,0),(2,1+t))
+      fill()
       print('Drawing completed')
   animate(loop)
 
 Now lets comment away this stupid assignment by inserting the ``#`` symbol. ::
 
   import wisualia
+  from wisualia.do import fill
   from wisualia.animation import animate
   from wisualia import shapes
 
@@ -322,6 +327,7 @@ Now lets comment away this stupid assignment by inserting the ``#`` symbol. ::
 
   def loop(t):
       wisualia.shapes.circle((0,0),(2,1+t))
+      fill()
       print('Drawing completed')
   animate(loop)
 
