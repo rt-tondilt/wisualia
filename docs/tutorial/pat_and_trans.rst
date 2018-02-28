@@ -34,9 +34,6 @@ A pattern is a virtual "paint" that is used to draw things. Patterns live in
 
 .. image:: /_images/first_fill.png
 
-Note that all color values are in range from 0 to 1. The default alpha value is
-1 meaning completely opaque.
-
 
 Loading images
 ----------------

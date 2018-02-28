@@ -78,7 +78,9 @@ circle shown above depend on the default arguments of ``circle()`` and
 
 .. image:: /_images/second_circle.png
 
-Resulting animation of "growing" circle at 1 second.
+Resulting animation of a "growing" circle at 1 second. Note that all color values
+(red, green, blue and alpha) are in range from 0 to 1. The default alpha value
+is 1 meaning completely opaque.
 
 We can use ``stroke()`` function to draw the edges of the shape.
 
