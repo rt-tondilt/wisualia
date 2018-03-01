@@ -17,7 +17,9 @@ def main() -> None:
 
     import loop
     from gui import window, set_status_bar_text
+    from state import new
 
+    new() # Display default program
     set_status_bar_text('No program running')
 
     window.show_all()

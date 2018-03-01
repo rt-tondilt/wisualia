@@ -107,10 +107,13 @@ def main_task():
 
 state.loop = Loop(main_task)
 
+FILE_NAME_MISSING = '''File name missing.
+Save your program at least once before running.'''
+
 def compile_task(worker):
     print('COMPILE')
     if state.file_name is None:
-        raise FailureException('File name missing.')
+        raise FailureException(FILE_NAME_MISSING)
 
     code = input_buffer.get_text(input_buffer.get_start_iter(), input_buffer.get_end_iter(), True)
 

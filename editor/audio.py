@@ -24,7 +24,7 @@ def set_file(audio_file_name: Optional[str], program_path: str):
         player.queue(music)
         got_file = True
     except Exception as e:
-        print('can not open file',e)
+        print('can not open audio file',e)
         got_file = False
         stop()
     os.chdir(old_dir)
