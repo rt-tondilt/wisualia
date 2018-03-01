@@ -52,7 +52,7 @@
   </object>
   <object class="GtkWindow" id="window">
     <property name="can_focus">False</property>
-    <property name="default_width">880</property>
+    <property name="default_width">800</property>
     <property name="default_height">500</property>
     <child>
       <object class="GtkBox" id="box1">
@@ -98,20 +98,6 @@
                 <property name="label" translatable="yes">Save and export</property>
                 <property name="use_underline">True</property>
                 <property name="icon_name">video-x-generic</property>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="homogeneous">True</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkToolButton" id="screenshot_button">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="is_important">True</property>
-                <property name="label" translatable="yes">Screenshot</property>
-                <property name="use_underline">True</property>
-                <property name="icon_name">camera-photo</property>
               </object>
               <packing>
                 <property name="expand">False</property>
