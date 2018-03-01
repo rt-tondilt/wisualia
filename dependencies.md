@@ -1,10 +1,10 @@
 # A list of all direct dependencies used by Wisualia
 
-## MSYS2
+## MSYS2 
 
 Neccesary to install up to date GTK3 on windows.
 
-## Python 3.6
+## Python 3.6 (PSF)
 
 Used everywhere.
 
@@ -12,26 +12,26 @@ Used everywhere.
 
 For gui and drawing.
 
-## GtkSourceView
+## GtkSourceView (LGPL)
 
 For syntax highlighting and code editing.
 
-## moviepy
+## moviepy (MIT)
 
 For saving videos.
 
-## numpy
+## numpy (3-clause BSD)
 
 For some things.
 
-## mypy and typing_extensions
+## mypy (MIT) and typing_extensions (PSF)
 
 For typechecking.
 
-## Sphinx
+## Sphinx (2-clause BSD)
 
 For documentation generation.
 
-## sphinx-autodoc-typehints
+## sphinx-autodoc-typehints (MIT)
 
 To use type annotations in documentation.
