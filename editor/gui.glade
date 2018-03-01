@@ -52,7 +52,7 @@
   </object>
   <object class="GtkWindow" id="window">
     <property name="can_focus">False</property>
-    <property name="default_width">700</property>
+    <property name="default_width">880</property>
     <property name="default_height">500</property>
     <child>
       <object class="GtkBox" id="box1">
@@ -227,7 +227,7 @@
           <object class="GtkPaned" id="paned1">
             <property name="visible">True</property>
             <property name="can_focus">True</property>
-            <property name="position">221</property>
+            <property name="position">300</property>
             <property name="wide_handle">True</property>
             <child>
               <object class="GtkBox" id="box6">
@@ -296,7 +296,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="orientation">vertical</property>
-                <property name="position">120</property>
+                <property name="position">260</property>
                 <property name="wide_handle">True</property>
                 <child>
                   <object class="GtkBox" id="box4">
