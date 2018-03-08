@@ -85,7 +85,7 @@ if len(sys.argv)==2:
         print(help_text)
         exit()
 elif len(sys.argv)>2:
-    print('ERROR: To many arguments.')
+    print('ERROR: Too many arguments.')
     print(help_text)
     exit()
 
