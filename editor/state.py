@@ -25,6 +25,7 @@ compile_needed = False
 
 running = False
 playing = False
+TMP = 'temporary.py'
 
 # We can't initialize it right now, because loop.py needs to access globals
 # defined in this file.
@@ -148,9 +149,13 @@ def stop_running_and_playing():
 
 def new():
     global file_name
-    file_name = None
-    file_label.set_text('')
+    file_name = os.getcwd()[:-6]+'\\'+TMP
+    file_label.set_text(TMP)
+    # file_name = None
+    # file_label.set_text('')
     input_buffer.set_text(DEFAULT_PROGRAM)
+    switch_running(None)
+    
 
 def new_file(_widget):
     dialog = Gtk.MessageDialog(window, 0, Gtk.MessageType.WARNING,
@@ -174,7 +179,7 @@ def save_file_as(_widget):
         stop_running_and_playing()
 
 def save_file(_widget):
-    if file_name == None:
+    if file_name == None or TMP in file_name:
         save_file_as(None)
     else:
         save()
