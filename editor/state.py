@@ -6,6 +6,8 @@ import os
 import sys
 import webbrowser
 
+from time import time
+
 import cairo
 from gi.repository import Gdk
 import mypy
@@ -26,6 +28,7 @@ compile_needed = False
 running = False
 playing = False
 TMP = 'temporary.py'
+TMP2= os.path.join('wisualia',TMP)
 
 # We can't initialize it right now, because loop.py needs to access globals
 # defined in this file.
@@ -101,6 +104,7 @@ def save():
     code = input_buffer.get_text(input_buffer.get_start_iter(), input_buffer.get_end_iter(), True)
     with open(file_name, 'w') as f:
         f.write(code)
+        return True
 
 # Run dialog and set file_name and file_label.
 # file_name and file_label won't change if user cancels.
@@ -108,13 +112,16 @@ def save():
 def file_dialog(label:str) -> bool:
     global file_name
     assert label in ['Open', 'Save']
-
     gtk_stock_ok = Gtk.STOCK_OPEN if label=='Open' else Gtk.STOCK_SAVE
     action = Gtk.FileChooserAction.OPEN if label=='Open' else Gtk.FileChooserAction.SAVE
+    print(6)
+    tim=time()
+    # WARNING! SLOW!!! 21,15sek
     dialog = Gtk.FileChooserDialog(label, window,
         action,
         (Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL,
          gtk_stock_ok, Gtk.ResponseType.OK))
+    print(7,round(time()-tim,2))
 
     dialog.set_current_folder(dir_tools.get_dir('examples'))
     if dialog.run() == Gtk.ResponseType.OK:
@@ -130,12 +137,12 @@ def file_dialog(label:str) -> bool:
 DEFAULT_PROGRAM = '''import wisualia
 from wisualia.do import fill, stroke
 from wisualia.shapes import circle
-from wisualia.patterns import RGBA
+from wisualia.patterns import HSVA
 from wisualia.animation import animate
 
 def loop(t):
     circle((0,0), 1+t)
-    fill(RGBA(1,1,0,0.5))
+    fill(HSVA(t/5,1,1,0.5))
     stroke()
 
 animate(loop)
@@ -149,10 +156,8 @@ def stop_running_and_playing():
 
 def new():
     global file_name
-    file_name = os.getcwd()[:-6]+'\\'+TMP
+    file_name = os.path.join(os.getcwd()[:-6],TMP)
     file_label.set_text(TMP)
-    # file_name = None
-    # file_label.set_text('')
     input_buffer.set_text(DEFAULT_PROGRAM)
     switch_running(None)
     
@@ -163,8 +168,8 @@ def new_file(_widget):
     dialog.format_secondary_text(
         "You will lose all your unsaved changes.")
     if dialog.run() == Gtk.ResponseType.OK:
-        new()
         stop_running_and_playing()
+        new()
     dialog.destroy()
 
 def open_file(_widget):
@@ -175,18 +180,21 @@ def open_file(_widget):
 
 def save_file_as(_widget):
     if file_dialog('Save'):
-        save()
+        status=save()
         stop_running_and_playing()
+        return status
 
 def save_file(_widget):
-    if file_name == None or TMP in file_name:
-        save_file_as(None)
+    x= TMP2 in file_name
+    print(x)
+    if file_name == None or x:
+        return save_file_as(None)
     else:
-        save()
+        return save()
 
 def export(_):
-    save_file(None)  # May not save if file_name==None and user cancels.
-    if file_name == None:
+    saved=save_file(None)  # May not save if file_name==None and user cancels. Siis tagastab None
+    if file_name == None or saved == None:
         set_output('','Can not export if file is not saved.')
         return
 
@@ -205,9 +213,9 @@ def typecheck(_):
     loop.start()
 
     save_file(None) # May not save if file_name==None and user cancels.
-    if file_name == None:
-        set_output('','Can not typecheck if file is not saved.')
-        return
+    #if file_name == None:
+    #    set_output('','Can not typecheck if file is not saved.')
+    #    return
 
     stdout, stderr, exitcode = mypy.api.run([file_name, '--config-file','mypy_user.ini'])
     result = stdout+stderr
