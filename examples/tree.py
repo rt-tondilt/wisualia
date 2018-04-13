@@ -25,14 +25,15 @@ def tree(count,t):
             tree(count-1,t)
 
 def loop(t):
-    global k,r, leaves
-    leaves=[]
- 
-    seed(6736)
-    tree(7,3*sin(t*5))
-    for l in leaves:
-        circle(tuple(l),0.1)
-    fill(HSVA(0,0,0.5))
+    with Move(0,-5.5), Scale((2,2)):
+        global k,r, leaves
+        leaves=[]
+     
+        seed(6736)
+        tree(7,5*sin(t*5))
+        for l in leaves:
+            circle(tuple(l),0.1*t/6)
+        fill(HSVA(0,0,0))
 
 
-animate(loop)
+animate(loop, duration=8)

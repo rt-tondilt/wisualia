@@ -53,6 +53,6 @@ def loop(t):
         tree(40,3*sin(2*t*pi),1)
         for l in leaves:
             circle(tuple(l),0.5)
-        fill(HSVA(0,0,0.5))
+        fill(HSVA(0,0,0))
 
-animate(loop, duration=3)
+animate(loop, duration=8)
