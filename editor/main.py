@@ -17,6 +17,7 @@ def main() -> None:
 
     import loop
     from gui import window, set_status_bar_text
+    import syntax_highlighting
     from state import new
 
     new() # Display default program
