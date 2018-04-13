@@ -8,6 +8,7 @@ from typing import Union
 import mypy.api
 from gi.repository import GLib, Gtk
 import state
+import file_io
 import audio
 from gui import input_buffer, set_output, set_status_bar_text, drawing_area, scale
 from worker import Worker, InitSuccess, Success, Failure, CompileRequest, DrawRequest
@@ -112,12 +113,12 @@ Save your program at least once before running.'''
 
 def compile_task(worker):
     print('COMPILE')
-    if state.file_name is None:
+    if file_io.file_name is None:
         raise FailureException(FILE_NAME_MISSING)
 
     code = input_buffer.get_text(input_buffer.get_start_iter(), input_buffer.get_end_iter(), True)
 
-    worker.send(CompileRequest(code, state.file_name))
+    worker.send(CompileRequest(code, file_io.file_name))
     response = worker.recv()
     while response == None:
         print('karju')
@@ -128,7 +129,7 @@ def compile_task(worker):
         raise FailureException(response)
 
     assert isinstance(response, InitSuccess)
-    audio.set_file(response.audio_file_name, state.file_name)
+    audio.set_file(response.audio_file_name, file_io.file_name)
     scale.set_adjustment(Gtk.Adjustment(0,0,response.animation_duration))
     set_output('','')
 

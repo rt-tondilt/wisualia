@@ -18,9 +18,10 @@ def main() -> None:
     import loop
     from gui import window, set_status_bar_text
     import syntax_highlighting
-    from state import new
+    from file_io import load_default_program
 
-    new() # Display default program
+
+    load_default_program()
     set_status_bar_text('No program running')
 
     window.show_all()
