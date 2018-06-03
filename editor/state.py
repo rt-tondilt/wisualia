@@ -11,9 +11,7 @@ from gi.repository import Gdk
 import mypy
 from worker import DrawRequest, Zoom
 import audio
-import gui
-# NB: There is one more import in the middle of this file.
-
+from gui import *
 
 # Some globals.
 buffer_surface = cairo.ImageSurface(cairo.FORMAT_ARGB32, 100, 100)
@@ -27,6 +25,41 @@ playing = False
 # We can't initialize it right now, because loop.py needs to access globals
 # defined in this file.
 loop = None
+
+
+def compile_buffer(_buffer, _start, _end): #because it is highlight callback.
+    global compile_needed
+    compile_needed = True
+    if running:
+        loop.start()
+
+def switch_playing(_widget):
+    global playing
+    playing = not playing
+    if playing:
+        play_button.set_image(pause_icon)
+    else:
+        play_button.set_image(play_icon)
+    loop.start()
+
+def switch_running(_widget):
+    global running
+    if not running:
+        running = True
+        run_button.set_stock_id('gtk-stop')
+        run_button.set_label('Abort')
+    else:
+        running = False
+        run_button.set_stock_id('gtk-execute')
+        run_button.set_label('Run')
+    loop.start()
+
+def stop_running_and_playing():
+    if running:
+        switch_running(None)
+    if playing:
+        switch_playing(None)
+
 
 def draw(widget, cr):
     cr.set_source_rgb(1,1,1)
@@ -60,7 +93,6 @@ def change_zoom(widget, event):
         else: assert False
         loop.start()
 
-
 def drag_handler(widget, event):
     global last_x, last_y # used in this function only
     if event.type == Gdk.EventType.BUTTON_PRESS:
@@ -74,12 +106,11 @@ def drag_handler(widget, event):
     # ignore GDK_2BUTTON_PRESS and GDK_2BUTTON_PRESS events
     loop.start()
 
-
-
 def grid_callback(_widget):
     global request
     request.grid = grid_button.get_active()
     loop.start()
+
 def home_callback(_widget):
     global request
     request.zoom.k = 40
@@ -87,50 +118,15 @@ def home_callback(_widget):
     request.zoom.b_y = request.y/2
     loop.start()
 
-
-def stop_running_and_playing():
-    if running:
-        switch_running(None)
-    if playing:
-        switch_playing(None)
-
-
-
-def show_help(_):
+def show_help(_widget):
     webbrowser.open(os.path.abspath('../docs/_build/index.html'))
-def switch_playing(_):
-    global playing
-    playing = not playing
-    if playing:
-        play_button.set_image(pause_icon)
-    else:
-        play_button.set_image(play_icon)
-    loop.start()
 
-def switch_running(_):
-    global running
-    if not running:
-        running = True
-        run_button.set_stock_id('gtk-stop')
-        run_button.set_label('Abort')
-    else:
-        running = False
-        run_button.set_stock_id('gtk-execute')
-        run_button.set_label('Run')
-    loop.start()
 
-gui.drawing_area.set_events(Gdk.EventMask.SCROLL_MASK |
+drawing_area.set_events(Gdk.EventMask.SCROLL_MASK |
                         Gdk.EventMask.BUTTON_PRESS_MASK |
                         Gdk.EventMask.BUTTON_MOTION_MASK)
 
-def compile_buffer(buffer, start, end):
-    global compile_needed
-    compile_needed = True
-    if running:
-        loop.start()
-
 # Connect events with callbacks.
-from gui import *
 play_button.connect('clicked', switch_playing)
 run_button.connect('clicked', switch_running)
 input_buffer.connect('highlight-updated', compile_buffer)
