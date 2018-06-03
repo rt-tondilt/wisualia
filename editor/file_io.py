@@ -12,8 +12,6 @@ import dir_tools
 file_name = None #type: Optional[str]
 
 
-TMP = 'temporary.py'
-
 DEFAULT_PROGRAM = '''import wisualia
 from wisualia.do import fill, stroke
 from wisualia.shapes import circle
@@ -37,7 +35,7 @@ def save():
 
 # Run dialog and set file_name and file_label.
 # file_name and file_label won't change if user cancels.
-# Return True if user didn't cancel, False otherwise.
+# Return False if user cancelled the operation..
 def file_dialog(label:str) -> bool:
     global file_name
     assert label in ['Open', 'Save']
@@ -49,7 +47,7 @@ def file_dialog(label:str) -> bool:
         (Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL,
          gtk_stock_ok, Gtk.ResponseType.OK))
 
-    dialog.set_current_folder(dir_tools.get_dir('examples'))
+    dialog.set_current_folder(dir_tools.relative_to_wisualia('examples'))
     if dialog.run() == Gtk.ResponseType.OK:
         name = dialog.get_filename()
         file_name = name
@@ -62,10 +60,8 @@ def file_dialog(label:str) -> bool:
 
 def load_default_program():
     global file_name
-    file_name = os.getcwd()[:-6]+'\\'+TMP
-    file_label.set_text(TMP)
-    # file_name = None
-    # file_label.set_text('')
+    file_name = None
+    file_label.set_text('Unsaved File')
     input_buffer.set_text(DEFAULT_PROGRAM)
     switch_running(None)
 
@@ -92,7 +88,7 @@ def save_file_as(_widget):
         stop_running_and_playing()
 
 def save_file(_widget):
-    if file_name == None or TMP in file_name:
+    if file_name == None:
         save_file_as(None)
     else:
         save()
@@ -104,7 +100,7 @@ def export(_widget):
         return
 
     dirpath = os.path.dirname(file_name)
-    libpath = dir_tools.get_dir('library')
+    libpath = dir_tools.relative_to_wisualia('library')
     interpath = sys.executable #python interpreter path
     task = ('start cmd /c '
             '"cd {} && set PYTHONPATH=%PYTHONPATH%;{} && '

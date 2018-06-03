@@ -12,10 +12,10 @@ import file_io
 import audio
 from gui import input_buffer, set_output, set_status_bar_text, drawing_area, scale
 from worker import Worker, InitSuccess, Success, Failure, CompileRequest, DrawRequest
-from dir_tools import get_dir
+import dir_tools
 
 
-os.environ['MYPYPATH'] = get_dir('library')
+os.environ['MYPYPATH'] = dir_tools.relative_to_wisualia('library')
 CB_TIME = 10
 FRAME_TIME = 40
 
@@ -108,17 +108,17 @@ def main_task():
 
 state.loop = Loop(main_task)
 
-FILE_NAME_MISSING = '''File name missing.
-Save your program at least once before running.'''
 
 def compile_task(worker):
     print('COMPILE')
-    if file_io.file_name is None:
-        raise FailureException(FILE_NAME_MISSING)
+
+    fname = file_io.file_name
+    if fname == None:
+        fname = dir_tools.relative_to_wisualia('unsaved_file')
 
     code = input_buffer.get_text(input_buffer.get_start_iter(), input_buffer.get_end_iter(), True)
 
-    worker.send(CompileRequest(code, file_io.file_name))
+    worker.send(CompileRequest(code, fname))
     response = worker.recv()
     while response == None:
         print('karju')
@@ -129,7 +129,7 @@ def compile_task(worker):
         raise FailureException(response)
 
     assert isinstance(response, InitSuccess)
-    audio.set_file(response.audio_file_name, file_io.file_name)
+    audio.set_file(response.audio_file_name, fname)
     scale.set_adjustment(Gtk.Adjustment(0,0,response.animation_duration))
     set_output('','')
 

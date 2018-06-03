@@ -1,5 +1,7 @@
 import os.path
-def get_dir(name):
-    editor_dir = os.path.dirname(os.path.abspath(__file__))
-    root_dir = os.path.dirname(editor_dir)
-    return os.path.join(root_dir, name)
+
+
+EDITOR_DIR = os.path.dirname(os.path.abspath(__file__))
+WISUALIA_DIR = os.path.dirname(EDITOR_DIR)
+def relative_to_wisualia(name):
+    return os.path.join(WISUALIA_DIR, name)

@@ -14,7 +14,7 @@ import cairo #type: ignore
 from error_format import get_error
 import dir_tools
 
-sys.path.append(dir_tools.get_dir('library'))
+sys.path.append(dir_tools.relative_to_wisualia('library'))
 # NB: In worker thread, library directory will appear twice inside sys.path.
 
 class Zoom(object):
