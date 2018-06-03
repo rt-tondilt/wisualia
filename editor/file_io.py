@@ -1,7 +1,9 @@
 import gi
 from gi.repository import Gtk
+import mypy
 
 from gui import input_buffer
+import state
 from state import switch_running, stop_running_and_playing
 import dir_tools
 # NB: There is one more import in the end of this file.
@@ -110,10 +112,10 @@ def export(_widget):
             'pause"').format(dirpath, libpath, interpath, file_name)
     os.system(task)
 
-# TODO: The result gets overwritten if playing is True.
+# TODO: The typecheck error messages get overwritten if playing is True.
 def typecheck(_widget):
     stop_running_and_playing()
-    loop.start()
+    state.loop.start()
 
     save_file(None) # May not save if file_name==None and user cancels.
     if file_name == None:

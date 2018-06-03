@@ -8,7 +8,6 @@ import webbrowser
 
 import cairo
 from gi.repository import Gdk
-import mypy
 from worker import DrawRequest, Zoom
 import audio
 from gui import *
