@@ -1,6 +1,8 @@
 # A list of all direct dependencies used by Wisualia
 
-## MSYS2 
+*This list is not complete.*
+
+## MSYS2
 
 Neccesary to install up to date GTK3 on windows.
 

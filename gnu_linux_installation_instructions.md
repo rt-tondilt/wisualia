@@ -2,9 +2,9 @@
 
 *These instructions have only been tested on Ubuntu 18.04.*
 
-Firstly we need python 3.6 and pip.
+Firstly we need python 3.6 and pip and GNOME Terminal.
 ```
-sudo apt install python3 python3-pip
+sudo apt install python3 python3-pip gnome-terminal
 ```
 
 Now other dependencies from APT.
