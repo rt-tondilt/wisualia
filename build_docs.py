@@ -10,7 +10,8 @@ Wisualia documentation generation script
 ========================================
 
 This script generates Wisualia documentation. You can run this script with any
-Python interpreter: native CPython or the one that comes with Wisualia.
+Python interpreter: native CPython or the one that comes with Wisualia Windows
+Bundle. The generated documentation will be in docs/_build directory.
 
 Arguments:
 
@@ -32,9 +33,11 @@ Arguments:
 import __main__
 os.chdir(os.path.dirname(os.path.abspath(__main__.__file__)))
 
-wisualia_dir = os.path.dirname(os.getcwd())
-python = os.path.join(wisualia_dir, 'mingw32/bin/python3.6.exe')
-
+if sys.platform == 'win32':
+    wisualia_bundle_dir = os.path.dirname(os.getcwd())
+    python = os.path.join(wisualia_bundle_dir, 'mingw32/bin/python3.6.exe')
+else:
+    python = 'python3'
 
 def run(name, task):
     print()
@@ -48,6 +51,10 @@ def publish():
     now = datetime.now().isoformat()
     print('          PUBLISHING DOCS')
     print('====================================')
+
+    if sys.platform != 'win32':
+        print('ERROR: Publishing the documentation works only on Windows.')
+        exit()
 
     # TODO: Why shutil rmtree does not work
     try_delete_dir = lambda: os.system(r'del docs\temp_repo /S /F /Q && rmdir docs\temp_repo /S /Q')
