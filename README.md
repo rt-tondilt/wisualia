@@ -21,7 +21,7 @@ There are two installation options for Windows. Both of them include installing
 a new Python interpreter, entire GTK3, Pyglet and some other packages. The first
 option is certainly easier.
 
-1. Download a windows bundle from the
+1. Download latest windows bundle from the
    [releases page](https://github.com/rt-tondilt/wisualia/releases).
 2. Follow complex
    [installation instructions](msys2_installation_instructions.md)
@@ -77,7 +77,7 @@ for i in range(10):
 ```
 
 For more code examples with auto-generated resulting images see the
-[tutorial](https://rt-tondilt.github.io/wisualia_documentation/tutorial/index.html)
+[tutorial](https://rt-tondilt.github.io/wisualia_documentation/tutorial/index.html).
 
 Wisualia library is currently **not** available on PyPI.
 
