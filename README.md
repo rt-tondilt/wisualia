@@ -9,10 +9,8 @@ will change.**
 
 ## Video demonstrations
 
-[Music](https://drive.google.com/file/d/1gINp70u-eQRgfnvW8uBCKh6BwseNTlOj/view?usp=sharing)
-
-[Logo](https://drive.google.com/file/d/1cb8EMM3VbfaFFBTloVPUjSDB0aH_ccT9/view?usp=sharing)
-
+[Music](https://drive.google.com/file/d/1gINp70u-eQRgfnvW8uBCKh6BwseNTlOj/view?usp=sharing) |
+[Logo](https://drive.google.com/file/d/1cb8EMM3VbfaFFBTloVPUjSDB0aH_ccT9/view?usp=sharing) | 
 [Tree](https://drive.google.com/file/d/1dlab2ehdO7jPFDwbtm4RZxyXlvtcu37P/view?usp=sharing)
 
 ## Installation
