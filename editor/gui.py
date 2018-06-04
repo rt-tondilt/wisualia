@@ -27,10 +27,18 @@ for name in widget_names:
 input_buffer = input_view.get_buffer()
 output_buffer = output_view.get_buffer()
 
-play_icon = Gtk.Image().new_from_stock(Gtk.STOCK_MEDIA_PLAY, Gtk.IconSize.DND)
-pause_icon = Gtk.Image().new_from_stock(Gtk.STOCK_MEDIA_PAUSE, Gtk.IconSize.DND)
+# Workaround against default huge DND buttons with certain icon themes.
+if sys.platform == 'win32':
+    play_pause_size = Gtk.IconSize.DND
+else:
+    play_pause_size = Gtk.IconSize.DIALOG
+
+play_icon = Gtk.Image().new_from_stock('gtk-media-play', play_pause_size)
+pause_icon = Gtk.Image().new_from_stock('gtk-media-pause', play_pause_size)
 run_icon = Gtk.Image().new_from_icon_name('gtk-execute', Gtk.IconSize.DND)
 abort_icon = Gtk.Image().new_from_icon_name('gtk-stop', Gtk.IconSize.DND)
+
+play_button.set_image(play_icon) # Substitute the image that came from glade file.
 
 def setup(): # call this only once in this file
 
