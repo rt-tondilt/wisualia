@@ -98,11 +98,17 @@ def drag_handler(widget, event):
         last_x = event.x
         last_y = event.y
     elif event.type == Gdk.EventType.MOTION_NOTIFY:
-        request.zoom.b_x += event.x -last_x
-        request.zoom.b_y += event.y - last_y
+
+        # It seems that MOTION_NOTIFY can happen before any BUTTON_PRESS events.
+        # If this happens then last_x and last_y are undefined.
+        try:
+            request.zoom.b_x += event.x -last_x
+            request.zoom.b_y += event.y - last_y
+        except NameError: pass
+        
         last_x = event.x
         last_y = event.y
-    # ignore GDK_2BUTTON_PRESS and GDK_2BUTTON_PRESS events
+    # ignore GDK_2BUTTON_PRESS and GDK_3BUTTON_PRESS events
     loop.start()
 
 def grid_callback(_widget):
