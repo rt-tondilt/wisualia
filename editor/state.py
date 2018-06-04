@@ -105,7 +105,7 @@ def drag_handler(widget, event):
             request.zoom.b_x += event.x -last_x
             request.zoom.b_y += event.y - last_y
         except NameError: pass
-        
+
         last_x = event.x
         last_y = event.y
     # ignore GDK_2BUTTON_PRESS and GDK_3BUTTON_PRESS events
@@ -124,7 +124,7 @@ def home_callback(_widget):
     loop.start()
 
 def show_help(_widget):
-    webbrowser.open(os.path.abspath('../docs/_build/index.html'))
+    webbrowser.open('https://rt-tondilt.github.io/wisualia_documentation/')
 
 
 drawing_area.set_events(Gdk.EventMask.SCROLL_MASK |
