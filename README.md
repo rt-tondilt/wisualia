@@ -76,6 +76,8 @@ for i in range(10):
     cr.restore()
 ```
 
+For more code examples with auto-generated resulting images see the
+[tutorial](https://rt-tondilt.github.io/wisualia_documentation/tutorial/index.html)
 
 Wisualia library is currently **not** available on PyPI.
 
