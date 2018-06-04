@@ -1,4 +1,5 @@
-
+import sys
+import os
 import gi #type: ignore
 from gi.repository import Gdk,GtkSource #type: ignore
 import colorsys

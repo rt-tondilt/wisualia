@@ -1,3 +1,4 @@
+import sys
 import gi
 from gi.repository import Gtk
 import mypy
@@ -102,10 +103,17 @@ def export(_widget):
     dirpath = os.path.dirname(file_name)
     libpath = dir_tools.relative_to_wisualia('library')
     interpath = sys.executable #python interpreter path
-    task = ('start cmd /c '
-            '"cd {} && set PYTHONPATH=%PYTHONPATH%;{} && '
-            '{} {} animate || '
-            'pause"').format(dirpath, libpath, interpath, file_name)
+
+    if sys.platform == 'win32':
+        task = (r'start cmd /c '
+                r'"cd {} && set PYTHONPATH=%PYTHONPATH%;{} && '
+                r'{} {} animate || '
+                r'pause"').format(dirpath, libpath, interpath, file_name)
+    else:
+        task = (r'gnome-terminal -- sh -c "'
+                r'cd {} && PYTHONPATH=$PYTHONPATH:{} '
+                r'python3 {} animate || '
+                r'read -p \"Press ENTER to continue\""').format(dirpath, libpath, file_name)
     os.system(task)
 
 # TODO: The typecheck error messages get overwritten if playing is True.
